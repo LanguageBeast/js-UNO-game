@@ -9,8 +9,10 @@
   --card-bg-color: #fff;
   --card-height-desktop: 4.5rem;
   --card-width-desktop: 3rem;
-  --number-fs-32: 2rem;
+  --number-fs-12: 0.75rem;
   --number-fs-16: 1rem;
+  --number-fs-24: 1.5rem;
+  --number-fs-32: 2rem;
 }
 
 * {
@@ -30,15 +32,17 @@ body {
   text-align: center;
   display: block;
   margin-block: 1rem 4rem;
+  color: var(--card-bg-color);
 }
 
 /* board styles */
 .board {
   position: relative;
   display: flex;
+  flex-wrap: wrap;
   margin-inline: auto;
   width: var(--board-size);
-  height: var(--board-size);
+  height: auto;
   border-radius: 50px;
   background-color: var(--board-color);
 }
@@ -46,7 +50,7 @@ body {
   content: "";
   position: absolute;
   width: var(--board-size);
-  height: var(--board-size);
+  height: 836px;
   display: block;
   transform: scale(1.1);
   opacity: 0.5;
@@ -67,29 +71,27 @@ body {
   border-radius: 5px;
   border: 1px solid var(--bg-color);
 }
-.card-elipsis {
-  position: absolute;
-  top: 35%;
-  left: -37%;
-  width: 3.55rem;
-  height: 2rem;
-  background-color: var(--card-bg-color);
-  transform: rotate(-48deg);
-  transform-origin: top;
-  border-radius: 100%;
-  z-index: 1;
-}
 .card-container .value {
   align-self: center;
-  font-size: var(--number-fs-32);
   font-weight: 900;
   z-index: 3;
 }
 .value.top,
 .value.bottom {
   position: absolute;
-  font-size: var(--number-fs-16);
   color: var(--card-bg-color);
+}
+.normal-font-main {
+  font-size: var(--number-fs-32);
+}
+.normal-font-secondary {
+  font-size: var(--number-fs-16);
+}
+.smaller-font-main {
+  font-size: var(--number-fs-24);
+}
+.smaller-font-secondary {
+  font-size: var(--number-fs-12);
 }
 .value.top {
   top: 0;
@@ -115,4 +117,57 @@ body {
 .blue {
   background-color: var(--blue-color);
   color: var(--blue-color);
+}
+.black-wild,
+.four-wild {
+  background-color: var(--bg-color);
+}
+.card-elipsis-wild {
+  position: absolute;
+  top: 35%;
+  left: -37%;
+  width: 3.55rem;
+  height: 2rem;
+  background: linear-gradient(
+    to top,
+    var(--red-color) 25%,
+    var(--blue-color) 25%,
+    var(--blue-color) 50%,
+    var(--yellow-color) 50%,
+    var(--yellow-color) 75%,
+    var(--green-color) 75%,
+    var(--green-color) 100%
+  );
+  transform: rotate(-48deg);
+  transform-origin: top;
+  border-radius: 100%;
+  z-index: 1;
+}
+.card-elipsis {
+  position: absolute;
+  top: 35%;
+  left: -37%;
+  width: 3.55rem;
+  height: 2rem;
+  background-color: var(--card-bg-color);
+  transform: rotate(-48deg);
+  transform-origin: top;
+  border-radius: 100%;
+  z-index: 1;
+}
+.top-elipsis {
+  position: absolute;
+  top: 7px;
+  transform: scale(0.3);
+  left: 0;
+}
+.bottom-elipsis {
+  position: absolute;
+  bottom: 7px;
+  transform: scale(-0.3);
+  right: 0;
+}
+.four-value {
+  transform: rotate(48deg) translateX(8px);
+  color: white;
 }
