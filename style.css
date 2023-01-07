@@ -1,0 +1,118 @@
+:root {
+  --bg-color: #000;
+  --board-color: #9a4141;
+  --red-color: #ff5555;
+  --yellow-color: #ffaa00;
+  --green-color: #55aa55;
+  --blue-color: #5555ff;
+  --board-size: 37rem;
+  --card-bg-color: #fff;
+  --card-height-desktop: 4.5rem;
+  --card-width-desktop: 3rem;
+  --number-fs-32: 2rem;
+  --number-fs-16: 1rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* global styles */
+body {
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+}
+
+/* header styles */
+.header-title {
+  text-align: center;
+  display: block;
+  margin-block: 1rem 4rem;
+}
+
+/* board styles */
+.board {
+  position: relative;
+  display: flex;
+  margin-inline: auto;
+  width: var(--board-size);
+  height: var(--board-size);
+  border-radius: 50px;
+  background-color: var(--board-color);
+}
+.board::before {
+  content: "";
+  position: absolute;
+  width: var(--board-size);
+  height: var(--board-size);
+  display: block;
+  transform: scale(1.1);
+  opacity: 0.5;
+  border-radius: 50px;
+  background-color: var(--board-color);
+}
+
+/* card styles */
+.card-container {
+  margin: 2px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: var(--card-width-desktop);
+  height: var(--card-height-desktop);
+  background-color: var(--card-bg-color);
+  z-index: 2;
+  border-radius: 5px;
+  border: 1px solid var(--bg-color);
+}
+.card-elipsis {
+  position: absolute;
+  top: 35%;
+  left: -37%;
+  width: 3.55rem;
+  height: 2rem;
+  background-color: var(--card-bg-color);
+  transform: rotate(-48deg);
+  transform-origin: top;
+  border-radius: 100%;
+  z-index: 1;
+}
+.card-container .value {
+  align-self: center;
+  font-size: var(--number-fs-32);
+  font-weight: 900;
+  z-index: 3;
+}
+.value.top,
+.value.bottom {
+  position: absolute;
+  font-size: var(--number-fs-16);
+  color: var(--card-bg-color);
+}
+.value.top {
+  top: 0;
+  left: 4px;
+}
+.value.bottom {
+  bottom: 0;
+  right: 4px;
+  transform: scale(-1);
+}
+.red {
+  background-color: var(--red-color);
+  color: var(--red-color);
+}
+.green {
+  background-color: var(--green-color);
+  color: var(--green-color);
+}
+.yellow {
+  background-color: var(--yellow-color);
+  color: var(--yellow-color);
+}
+.blue {
+  background-color: var(--blue-color);
+  color: var(--blue-color);
+}
