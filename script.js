@@ -9,7 +9,9 @@ const playButtonElement = document.querySelector(".play-button");
 let allCardsInDeck;
 let cardsInDeck;
 
-const cardsPerPlayer = 7;
+const cardsPerPlayer = 8;
+const dealDelay = 50;
+const finishedDealing = false;
 
 // objects
 const cards = [
@@ -148,11 +150,16 @@ generateCards();
 
 // add event listener to play button
 playButtonElement.addEventListener("click", () => {
-  dealCards();
-  playButtonElement.classList.toggle("invisible");
+  startGame();
 });
 
 // ------------------------------
+
+function startGame() {
+  playButtonElement.classList.toggle("invisible");
+  dealCards();
+  setTimeout(flipMainPlayerCards, dealDelay * (cardsPerPlayer * 10));
+}
 
 function generateCard(card) {
   // get div main elements
@@ -272,7 +279,7 @@ function dealCards() {
   let dealtCards = 0;
   let currentPlayer = 0;
   let playerToDealTo;
-  let id = setInterval(dealCard, 50);
+  let id = setInterval(dealCard, dealDelay);
 
   function dealCard() {
     let cardElement = drawCardFromDeck();
@@ -314,6 +321,15 @@ function updateDeckCardsList() {
 }
 function toggleCardInDeck(card) {
   card.classList.toggle("in-deck");
+}
+function flipCard(card) {
+  card.classList.toggle("flip");
+}
+function flipMainPlayerCards() {
+  let bottomCards = document.querySelectorAll(".player-bottom .card-container");
+  bottomCards.forEach((cardElement) => {
+    flipCard(cardElement);
+  });
 }
 
 // utility functions
