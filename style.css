@@ -5,7 +5,8 @@
   --yellow-color: #ffaa00;
   --green-color: #55aa55;
   --blue-color: #5555ff;
-  --board-size: 37rem;
+  --board-width: 37rem;
+  --board-height: 37rem;
   --card-bg-color: #fff;
   --card-height-desktop: 4.5rem;
   --card-width-desktop: 3rem;
@@ -28,29 +29,72 @@ body {
 }
 
 /* header styles */
+.header-content {
+  display: flex;
+  flex-direction: column;
+  margin-block: 1rem 4rem;
+}
 .header-title {
   text-align: center;
   display: block;
-  margin-block: 1rem 4rem;
   color: var(--card-bg-color);
+}
+.play-button {
+  margin-inline: auto;
+  outline: none;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  width: 60px;
+  height: 40px;
+  padding: 8px 12px;
+  background-color: var(--board-color);
+  color: var(--card-bg-color);
+  font-weight: bold;
+  border: 2px solid var(--card-bg-color);
+}
+/* center of the board */
+.board-center {
+  grid-area: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+}
+.deck,
+.bin {
+  position: relative;
+  width: var(--card-width-desktop);
+  height: var(--card-height-desktop);
+  margin-inline: 10px;
+}
+.deck {
+}
+.bin {
+  background-color: var(--bg-color);
+  opacity: 0.1;
 }
 
 /* board styles */
 .board {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-areas:
+    "4 top top top 5"
+    "left z z z right"
+    "left 1 center 2 right"
+    "left x x x right"
+    "3 bottom bottom bottom 6";
   margin-inline: auto;
-  width: var(--board-size);
-  height: auto;
+  width: var(--board-width);
+  height: var(--board-height);
   border-radius: 50px;
   background-color: var(--board-color);
 }
 .board::before {
   content: "";
   position: absolute;
-  width: var(--board-size);
-  height: 836px;
+  width: var(--board-width);
+  height: var(--board-height);
   display: block;
   transform: scale(1.1);
   opacity: 0.5;
@@ -58,10 +102,86 @@ body {
   background-color: var(--board-color);
 }
 
+/* player styles */
+.player-inner .current-cards {
+  display: flex;
+}
+.player {
+  font-weight: bold;
+  font-size: var(--number-fs-24);
+  color: var(--card-bg-color);
+  text-align: center;
+}
+.player-left,
+.player-right,
+.player-top,
+.player-bottom {
+  display: flex;
+  padding: 30px 10px;
+}
+.player-left,
+.player-right {
+  flex-direction: column;
+}
+.player-right .card-container {
+  rotate: -90deg;
+  margin-block: -10px;
+}
+.player-left .card-container {
+  rotate: 90deg;
+  margin-block: -10px;
+}
+.player-top .card-container {
+  rotate: 180deg;
+  margin-inline: 3px;
+}
+.player-bottom .card-container {
+  margin-inline: 3px;
+}
+.player-left {
+  grid-area: left;
+  align-items: end;
+}
+.player-right {
+  grid-area: right;
+  align-items: flex-start;
+}
+.player-top {
+  grid-area: top;
+  align-items: flex-end;
+}
+.player-bottom {
+  grid-area: bottom;
+  align-items: flex-start;
+}
+/* rotate styles */
+.rotate-left {
+  transform: rotateX(-90deg) !important;
+}
+.rotate-right {
+  transform: rotateX(90deg) !important;
+}
+.rotate-top {
+  transform: rotateX(180deg) !important;
+}
 /* card styles */
 .card-container {
+  width: var(--card-width-desktop);
+  height: var(--card-height-desktop);
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+.card-front,
+.card-back {
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.card-back {
+  transform: rotateY(180deg);
+}
+.card {
   margin: 2px;
-  position: relative;
   display: flex;
   justify-content: center;
   width: var(--card-width-desktop);
@@ -71,7 +191,16 @@ body {
   border-radius: 5px;
   border: 1px solid var(--bg-color);
 }
-.card-container .value {
+.card-back {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: var(--bg-color);
+  color: var(--card-bg-color);
+  border: 4px solid var(--card-bg-color);
+}
+.card .value {
   align-self: center;
   font-weight: 900;
   z-index: 3;
@@ -170,4 +299,12 @@ body {
 .four-value {
   transform: rotate(48deg) translateX(8px);
   color: white;
+}
+
+/* deck card styles */
+.in-deck {
+  position: absolute;
+}
+.flip {
+  transform: rotateY(180deg) translateX(-3px);
 }
