@@ -11,7 +11,7 @@ let allCardsInDeck;
 let cardsInDeck;
 // document.querySelectorAll(".card-container:not(.in-deck)")
 
-const cardsPerPlayer = 7;
+const cardsPerPlayer = 2;
 const dealDelay = 50;
 const finishedDealing = false;
 
@@ -161,6 +161,7 @@ function startGame() {
   playButtonElement.classList.toggle("invisible");
   dealCards();
   startDiscardPile();
+  enableDeck();
 }
 
 function generateCard(card) {
@@ -323,6 +324,7 @@ function dealCards() {
 function extractCardFromDeck() {
   let randomCardIndeplayer = Math.floor(Math.random() * cardsInDeck);
   let chosenCard = allCardsInDeck[randomCardIndeplayer];
+  if (!chosenCard) return;
   cardsInDeck--;
   let pickedCard = deckElement.removeChild(chosenCard);
   // update cards from deck list
@@ -388,8 +390,11 @@ function checkIfCardIsPlayable(cardId) {
   let binCardIds = topcardDiscardPileId.split(" ");
   let chosenCardIds = cardId.split(" ");
   // first come the color, then the type, then the value/action
-  if (topcardDiscardPileId[0] === "black-wild") {
-    // if a wild is atop the discard pile, any card card can be used
+  if (
+    topcardDiscardPileId[0] === "black-wild" ||
+    topcardDiscardPileId[0] === "four-wild"
+  ) {
+    // if a wild or wild draw four is atop the discard pile, any card card can be used (CHANGE THIS LATER!)
     return true;
   } else if (
     chosenCardIds[2] === "wild" ||
@@ -406,6 +411,18 @@ function checkIfCardIsPlayable(cardId) {
   } else {
     return false; // the cards are incompatible
   }
+}
+
+// add draw card functionality
+function enableDeck() {
+  deckElement.addEventListener("click", drawCard);
+}
+function drawCard() {
+  let cardFromDeck = extractCardFromDeck();
+  if (!cardFromDeck) return;
+  cardFromDeck.classList.toggle("in-deck");
+  addChildElement(bottomPlayerElement, cardFromDeck);
+  setTimeout(flipCard, 50, cardFromDeck);
 }
 
 // utility functions

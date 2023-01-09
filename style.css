@@ -73,6 +73,7 @@ body {
   margin-inline: 10px;
 }
 .deck {
+  cursor: pointer;
 }
 .discard-pile::before {
   position: absolute;
@@ -129,6 +130,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-wrap: wrap;
 }
 .player-top,
 .player-bottom {
