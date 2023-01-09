@@ -1,6 +1,7 @@
 // global variables
 const boardElement = document.querySelector(".board");
 const deckElement = document.querySelector(".deck");
+const discardPileElement = document.querySelector(".discard-pile");
 const bottomPlayerElement = document.querySelector(".player-bottom");
 const topPlayerElement = document.querySelector(".player-top");
 const leftPlayerElement = document.querySelector(".player-left");
@@ -9,7 +10,7 @@ const playButtonElement = document.querySelector(".play-button");
 let allCardsInDeck;
 let cardsInDeck;
 
-const cardsPerPlayer = 8;
+const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
 
@@ -158,7 +159,7 @@ playButtonElement.addEventListener("click", () => {
 function startGame() {
   playButtonElement.classList.toggle("invisible");
   dealCards();
-  setTimeout(flipMainPlayerCards, dealDelay * (cardsPerPlayer * 10));
+  startDiscardPile();
 }
 
 function generateCard(card) {
@@ -303,7 +304,10 @@ function dealCards() {
     currentPlayer++;
     dealtCards++;
     if (currentPlayer === 4) currentPlayer = 0;
-    if (dealtCards === cardsPerPlayer * 4) clearInterval(id);
+    if (dealtCards === cardsPerPlayer * 4) {
+      clearInterval(id);
+      flipMainPlayerCards();
+    }
   }
 }
 
@@ -330,6 +334,13 @@ function flipMainPlayerCards() {
   bottomCards.forEach((cardElement) => {
     flipCard(cardElement);
   });
+}
+
+// start discard pile
+function startDiscardPile() {
+  let cardElement = drawCardFromDeck();
+  addChildElement(discardPileElement, cardElement);
+  setTimeout(flipCard, 50, cardElement);
 }
 
 // utility functions
