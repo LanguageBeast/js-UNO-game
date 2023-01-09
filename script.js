@@ -9,6 +9,7 @@ const rightPlayerElement = document.querySelector(".player-right");
 const playButtonElement = document.querySelector(".play-button");
 let allCardsInDeck;
 let cardsInDeck;
+// document.querySelectorAll(".card-container:not(.in-deck)")
 
 const cardsPerPlayer = 7;
 const dealDelay = 50;
@@ -283,7 +284,7 @@ function dealCards() {
   let id = setInterval(dealCard, dealDelay);
 
   function dealCard() {
-    let cardElement = drawCardFromDeck();
+    let cardElement = extractCardFromDeck();
     players[currentPlayer].currentCards.push(cardElement.id);
     switch (currentPlayer) {
       case 0:
@@ -299,10 +300,18 @@ function dealCards() {
         playerToDealTo = rightPlayerElement;
         break;
     }
+    // add clickable functionality to main player's cards
+    if (currentPlayer === 0) {
+      cardElement.addEventListener("click", (e) => {
+        playCard(e.target);
+      });
+    }
     toggleCardInDeck(cardElement);
     addChildElement(playerToDealTo, cardElement);
     currentPlayer++;
     dealtCards++;
+
+    // break the inverval
     if (currentPlayer === 4) currentPlayer = 0;
     if (dealtCards === cardsPerPlayer * 4) {
       clearInterval(id);
@@ -311,7 +320,7 @@ function dealCards() {
   }
 }
 
-function drawCardFromDeck() {
+function extractCardFromDeck() {
   let randomCardIndeplayer = Math.floor(Math.random() * cardsInDeck);
   let chosenCard = allCardsInDeck[randomCardIndeplayer];
   cardsInDeck--;
@@ -338,9 +347,65 @@ function flipMainPlayerCards() {
 
 // start discard pile
 function startDiscardPile() {
-  let cardElement = drawCardFromDeck();
+  let cardElement = extractCardFromDeck();
   addChildElement(discardPileElement, cardElement);
   setTimeout(flipCard, 50, cardElement);
+}
+
+// add clicking functionality to main player cards
+function playCard(card) {
+  let chosenCard = getChosenCard(card);
+  if (checkIfCardIsPlayable(chosenCard.id)) {
+    dispatchCardToDiscardPile(chosenCard);
+  }
+}
+function getChosenCard(card) {
+  while (!card.classList.contains("card-container")) {
+    card = card.parentElement;
+  }
+  return card;
+}
+
+function dispatchCardToDiscardPile(cardElement) {
+  let removedCard;
+  cardElement.classList.toggle("remove");
+  setTimeout(() => {
+    removedCard = bottomPlayerElement.removeChild(cardElement);
+    removedCard.classList.toggle("in-deck");
+    addChildElement(discardPileElement, removedCard);
+    setTimeout(() => {
+      removedCard.classList.toggle("remove");
+    }, 50);
+  }, 300); // 300 is the duration of the animation (0.3s)
+}
+
+function checkIfCardIsPlayable(cardId) {
+  // get card id "atop" of discard pile IE last child
+  let topcardDiscardPileId = document.querySelector(
+    ".discard-pile .card-container:last-child"
+  ).id;
+  // dissect both cards id's to check for rules compability
+  let binCardIds = topcardDiscardPileId.split(" ");
+  let chosenCardIds = cardId.split(" ");
+  // first come the color, then the type, then the value/action
+  if (topcardDiscardPileId[0] === "black-wild") {
+    // if a wild is atop the discard pile, any card card can be used
+    return true;
+  } else if (
+    chosenCardIds[2] === "wild" ||
+    chosenCardIds[2] === "wild-draw-four"
+  ) {
+    return true; // wilds or wild draw four can be used everywhere
+  } else if (binCardIds[0] === chosenCardIds[0]) {
+    return true; // both are the same color
+  } else if (
+    binCardIds[1] === chosenCardIds[1] &&
+    binCardIds[2] === chosenCardIds[2]
+  ) {
+    return true; // both are numbers or specials and they're the same
+  } else {
+    return false; // the cards are incompatible
+  }
 }
 
 // utility functions
