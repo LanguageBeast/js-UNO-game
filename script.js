@@ -163,10 +163,10 @@ playButtonElement.addEventListener("click", () => {
 // ------------------------------
 
 function startGame() {
-  playButtonElement.classList.toggle("invisible");
   dealCards();
   startDiscardPile();
   enableDeck();
+  toggleVariablesVisibility();
 }
 
 function generateCard(card) {
@@ -431,6 +431,15 @@ function drawCard() {
   });
   addChildElement(bottomPlayerElement, cardFromDeck);
   setTimeout(flipCard, 50, cardFromDeck);
+}
+
+// toggle visibility upon game start
+function toggleVariablesVisibility() {
+  let hiddenVariables = document.querySelectorAll(".invisible");
+  hiddenVariables.forEach((element) => {
+    element.classList.toggle("invisible");
+  });
+  playButtonElement.classList.toggle("invisible");
 }
 
 // utility functions
