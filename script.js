@@ -23,6 +23,7 @@ const dealDelay = 50;
 const finishedDealing = false;
 
 // objects
+let hasCurrentPlayerDrawnCard;
 const cards = [
   { color: "red", type: "number", value: 0 },
   { color: "red", type: "number", value: 1 },
@@ -172,6 +173,7 @@ function startGame() {
   toggleVariablesVisibility();
   setStartingTurn();
   updateTurnOnHTML(currentTurn);
+  hasCurrentPlayerDrawnCard = false;
   if (currentTurn !== 0) {
     setTimeout(enableBots, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
   }
@@ -179,8 +181,8 @@ function startGame() {
 // make the computer play
 function enableBots() {
   togglePlayerOPPlayability();
+  hasCurrentPlayerDrawnCard = false;
   if (currentTurn < numberOfPlayers) {
-    console.log(currentTurn);
     updateTurnOnHTML(currentTurn);
     setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
     currentTurn++;
@@ -193,24 +195,40 @@ function enableBots() {
   }
 }
 function makeBotPlay(usedTurn) {
+  let chosenRandomCard;
   let playableCards = getPlayableCardsByBot(usedTurn);
   if (playableCards.length > 0) {
-    let chosenRandomCard =
+    chosenRandomCard =
       playableCards[Math.floor(Math.random() * playableCards.length)];
-    flipCard(chosenRandomCard);
-    setTimeout(dispatchCardToDiscardPile, 1000, chosenRandomCard, usedTurn);
-    setTimeout(enableBots, 1500);
+  } else {
+    drawCard(usedTurn);
+    let drawnCard = getPlayableCardsByBot(usedTurn)[0];
+    if (drawnCard) {
+      chosenRandomCard = drawnCard;
+    }
   }
+  if (chosenRandomCard) {
+    setTimeout(flipCard, 100, chosenRandomCard);
+    setTimeout(dispatchCardToDiscardPile, 1000, chosenRandomCard, usedTurn);
+  }
+  setTimeout(enableBots, 1500);
 }
 function getPlayableCardsByBot(usedTurn) {
   const currentBot = getPlayerFromCurrentTurn(usedTurn);
-  const currentBotCards = currentBot.childNodes;
   let playableCards = [];
-  currentBotCards.forEach((card) => {
-    if (checkIfCardIsPlayable(card.id)) {
-      playableCards.push(card);
+  if (!hasCurrentPlayerDrawnCard) {
+    let currentBotCards = currentBot.childNodes;
+    currentBotCards.forEach((card) => {
+      if (checkIfCardIsPlayable(card.id)) {
+        playableCards.push(card);
+      }
+    });
+  } else {
+    let drawnCard = currentBot.childNodes[currentBot.childNodes.length - 1];
+    if (checkIfCardIsPlayable(drawnCard.id)) {
+      playableCards.push(drawnCard);
     }
-  });
+  }
   return playableCards;
 }
 
@@ -481,17 +499,28 @@ function checkIfCardIsPlayable(cardId) {
 function enableDeck() {
   deckElement.addEventListener("click", drawCard);
 }
-function drawCard() {
-  let cardFromDeck = extractCardFromDeck();
-  if (!cardFromDeck) return;
-  cardFromDeck.classList.toggle("in-deck");
-  cardFromDeck.addEventListener("click", (e) => {
-    playCard(e.target);
-  });
-  let playerToDealTo = getPlayerFromCurrentTurn(currentTurn);
-  players[currentTurn].currentCards.push(cardFromDeck.id);
-  addChildElement(playerToDealTo, cardFromDeck);
-  setTimeout(flipCard, 50, cardFromDeck);
+function drawCard(usedTurn) {
+  if (!hasCurrentPlayerDrawnCard) {
+    let setTurn;
+    if (typeof usedTurn !== "number") {
+      setTurn = currentTurn;
+    } else {
+      setTurn = usedTurn;
+    }
+    let cardFromDeck = extractCardFromDeck();
+    if (!cardFromDeck) return;
+    cardFromDeck.classList.toggle("in-deck");
+    cardFromDeck.addEventListener("click", (e) => {
+      playCard(e.target);
+    });
+    let playerToDealTo = getPlayerFromCurrentTurn(setTurn);
+    players[setTurn].currentCards.push(cardFromDeck.id);
+    addChildElement(playerToDealTo, cardFromDeck);
+    if (setTurn === 0) {
+      setTimeout(flipCard, 50, cardFromDeck);
+    }
+    hasCurrentPlayerDrawnCard = true;
+  }
 }
 
 // toggle visibility upon game start
@@ -526,7 +555,4 @@ function addIdToElement(elem, id) {
 }
 function addChildElement(parentElem, childElem) {
   parentElem.appendChild(childElem);
-}
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

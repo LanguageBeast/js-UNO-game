@@ -100,6 +100,7 @@ body {
   height: var(--board-height);
   border-radius: 50px;
   background-color: var(--board-color);
+  margin-block: 5rem;
 }
 .board::before {
   content: "";
