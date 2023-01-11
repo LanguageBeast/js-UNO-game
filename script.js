@@ -15,8 +15,10 @@ const playerLeftName = document.querySelector(".player-left-name");
 const playerRightName = document.querySelector(".player-right-name");
 const playerTopName = document.querySelector(".player-top-name");
 const playerBottomName = document.querySelector(".player-bottom-name");
+const currentTurnElement = document.querySelector(".header-current-turn");
 
-const cardsPerPlayer = 4;
+const numberOfPlayers = 4;
+const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
 
@@ -41,105 +43,102 @@ const cards = [
   { color: "red", type: "number", value: 7 },
   { color: "red", type: "number", value: 8 },
   { color: "red", type: "number", value: 9 },
-  // { color: "green", type: "number", value: 0 },
-  // { color: "green", type: "number", value: 1 },
-  // { color: "green", type: "number", value: 2 },
-  // { color: "green", type: "number", value: 3 },
-  // { color: "green", type: "number", value: 4 },
-  // { color: "green", type: "number", value: 5 },
-  // { color: "green", type: "number", value: 6 },
-  // { color: "green", type: "number", value: 7 },
-  // { color: "green", type: "number", value: 8 },
-  // { color: "green", type: "number", value: 9 },
-  // { color: "green", type: "number", value: 1 },
-  // { color: "green", type: "number", value: 2 },
-  // { color: "green", type: "number", value: 3 },
-  // { color: "green", type: "number", value: 4 },
-  // { color: "green", type: "number", value: 5 },
-  // { color: "green", type: "number", value: 6 },
-  // { color: "green", type: "number", value: 7 },
-  // { color: "green", type: "number", value: 8 },
-  // { color: "green", type: "number", value: 9 },
-  // { color: "blue", type: "number", value: 0 },
-  // { color: "blue", type: "number", value: 1 },
-  // { color: "blue", type: "number", value: 2 },
-  // { color: "blue", type: "number", value: 3 },
-  // { color: "blue", type: "number", value: 4 },
-  // { color: "blue", type: "number", value: 5 },
-  // { color: "blue", type: "number", value: 6 },
-  // { color: "blue", type: "number", value: 7 },
-  // { color: "blue", type: "number", value: 8 },
-  // { color: "blue", type: "number", value: 9 },
-  // { color: "blue", type: "number", value: 1 },
-  // { color: "blue", type: "number", value: 2 },
-  // { color: "blue", type: "number", value: 3 },
-  // { color: "blue", type: "number", value: 4 },
-  // { color: "blue", type: "number", value: 5 },
-  // { color: "blue", type: "number", value: 6 },
-  // { color: "blue", type: "number", value: 7 },
-  // { color: "blue", type: "number", value: 8 },
-  // { color: "blue", type: "number", value: 9 },
-  // { color: "yellow", type: "number", value: 0 },
-  // { color: "yellow", type: "number", value: 1 },
-  // { color: "yellow", type: "number", value: 2 },
-  // { color: "yellow", type: "number", value: 3 },
-  // { color: "yellow", type: "number", value: 4 },
-  // { color: "yellow", type: "number", value: 5 },
-  // { color: "yellow", type: "number", value: 6 },
-  // { color: "yellow", type: "number", value: 7 },
-  // { color: "yellow", type: "number", value: 8 },
-  // { color: "yellow", type: "number", value: 9 },
-  // { color: "yellow", type: "number", value: 1 },
-  // { color: "yellow", type: "number", value: 2 },
-  // { color: "yellow", type: "number", value: 3 },
-  // { color: "yellow", type: "number", value: 4 },
-  // { color: "yellow", type: "number", value: 5 },
-  // { color: "yellow", type: "number", value: 6 },
-  // { color: "yellow", type: "number", value: 7 },
-  // { color: "yellow", type: "number", value: 8 },
-  // { color: "yellow", type: "number", value: 9 },
-  // { color: "red", type: "special", value: "reverse" },
-  // { color: "red", type: "special", value: "reverse" },
-  // { color: "yellow", type: "special", value: "reverse" },
-  // { color: "yellow", type: "special", value: "reverse" },
-  // { color: "green", type: "special", value: "reverse" },
-  // { color: "green", type: "special", value: "reverse" },
-  // { color: "blue", type: "special", value: "reverse" },
-  // { color: "blue", type: "special", value: "reverse" },
-  // { color: "red", type: "special", value: "skip" },
-  // { color: "red", type: "special", value: "skip" },
-  // { color: "yellow", type: "special", value: "skip" },
-  // { color: "yellow", type: "special", value: "skip" },
-  // { color: "green", type: "special", value: "skip" },
-  // { color: "green", type: "special", value: "skip" },
-  // { color: "blue", type: "special", value: "skip" },
-  // { color: "blue", type: "special", value: "skip" },
-  // { color: "black-wild", type: "special", value: "wild" },
-  // { color: "black-wild", type: "special", value: "wild" },
-  // { color: "black-wild", type: "special", value: "wild" },
-  // { color: "black-wild", type: "special", value: "wild" },
-  // { color: "red", type: "special", value: "draw-two" },
-  // { color: "red", type: "special", value: "draw-two" },
-  // { color: "yellow", type: "special", value: "draw-two" },
-  // { color: "yellow", type: "special", value: "draw-two" },
-  // { color: "green", type: "special", value: "draw-two" },
-  // { color: "green", type: "special", value: "draw-two" },
-  // { color: "blue", type: "special", value: "draw-two" },
-  // { color: "blue", type: "special", value: "draw-two" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "green", type: "number", value: 0 },
+  { color: "green", type: "number", value: 1 },
+  { color: "green", type: "number", value: 2 },
+  { color: "green", type: "number", value: 3 },
+  { color: "green", type: "number", value: 4 },
+  { color: "green", type: "number", value: 5 },
+  { color: "green", type: "number", value: 6 },
+  { color: "green", type: "number", value: 7 },
+  { color: "green", type: "number", value: 8 },
+  { color: "green", type: "number", value: 9 },
+  { color: "green", type: "number", value: 1 },
+  { color: "green", type: "number", value: 2 },
+  { color: "green", type: "number", value: 3 },
+  { color: "green", type: "number", value: 4 },
+  { color: "green", type: "number", value: 5 },
+  { color: "green", type: "number", value: 6 },
+  { color: "green", type: "number", value: 7 },
+  { color: "green", type: "number", value: 8 },
+  { color: "green", type: "number", value: 9 },
+  { color: "blue", type: "number", value: 0 },
+  { color: "blue", type: "number", value: 1 },
+  { color: "blue", type: "number", value: 2 },
+  { color: "blue", type: "number", value: 3 },
+  { color: "blue", type: "number", value: 4 },
+  { color: "blue", type: "number", value: 5 },
+  { color: "blue", type: "number", value: 6 },
+  { color: "blue", type: "number", value: 7 },
+  { color: "blue", type: "number", value: 8 },
+  { color: "blue", type: "number", value: 9 },
+  { color: "blue", type: "number", value: 1 },
+  { color: "blue", type: "number", value: 2 },
+  { color: "blue", type: "number", value: 3 },
+  { color: "blue", type: "number", value: 4 },
+  { color: "blue", type: "number", value: 5 },
+  { color: "blue", type: "number", value: 6 },
+  { color: "blue", type: "number", value: 7 },
+  { color: "blue", type: "number", value: 8 },
+  { color: "blue", type: "number", value: 9 },
+  { color: "yellow", type: "number", value: 0 },
+  { color: "yellow", type: "number", value: 1 },
+  { color: "yellow", type: "number", value: 2 },
+  { color: "yellow", type: "number", value: 3 },
+  { color: "yellow", type: "number", value: 4 },
+  { color: "yellow", type: "number", value: 5 },
+  { color: "yellow", type: "number", value: 6 },
+  { color: "yellow", type: "number", value: 7 },
+  { color: "yellow", type: "number", value: 8 },
+  { color: "yellow", type: "number", value: 9 },
+  { color: "yellow", type: "number", value: 1 },
+  { color: "yellow", type: "number", value: 2 },
+  { color: "yellow", type: "number", value: 3 },
+  { color: "yellow", type: "number", value: 4 },
+  { color: "yellow", type: "number", value: 5 },
+  { color: "yellow", type: "number", value: 6 },
+  { color: "yellow", type: "number", value: 7 },
+  { color: "yellow", type: "number", value: 8 },
+  { color: "yellow", type: "number", value: 9 },
+  { color: "red", type: "special", value: "reverse" },
+  { color: "red", type: "special", value: "reverse" },
+  { color: "yellow", type: "special", value: "reverse" },
+  { color: "yellow", type: "special", value: "reverse" },
+  { color: "green", type: "special", value: "reverse" },
+  { color: "green", type: "special", value: "reverse" },
+  { color: "blue", type: "special", value: "reverse" },
+  { color: "blue", type: "special", value: "reverse" },
+  { color: "red", type: "special", value: "skip" },
+  { color: "red", type: "special", value: "skip" },
+  { color: "yellow", type: "special", value: "skip" },
+  { color: "yellow", type: "special", value: "skip" },
+  { color: "green", type: "special", value: "skip" },
+  { color: "green", type: "special", value: "skip" },
+  { color: "blue", type: "special", value: "skip" },
+  { color: "blue", type: "special", value: "skip" },
+  { color: "black-wild", type: "special", value: "wild" },
+  { color: "black-wild", type: "special", value: "wild" },
+  { color: "black-wild", type: "special", value: "wild" },
+  { color: "black-wild", type: "special", value: "wild" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
 ];
 
 // players
+let currentTurn;
 const players = [
   {
-    player: "Amanda",
-    currentCards: [],
-  },
-  {
-    player: "Veronica",
+    player: "OP",
     currentCards: [],
   },
   {
@@ -147,7 +146,11 @@ const players = [
     currentCards: [],
   },
   {
-    player: "OP",
+    player: "Amanda",
+    currentCards: [],
+  },
+  {
+    player: "Veronica",
     currentCards: [],
   },
 ];
@@ -167,8 +170,54 @@ function startGame() {
   startDiscardPile();
   enableDeck();
   toggleVariablesVisibility();
+  setStartingTurn();
+  updateTurnOnHTML(currentTurn);
+  if (currentTurn !== 0) {
+    setTimeout(enableBots, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
+  }
+}
+// make the computer play
+function enableBots() {
+  togglePlayerOPPlayability();
+  if (currentTurn < numberOfPlayers) {
+    console.log(currentTurn);
+    updateTurnOnHTML(currentTurn);
+    setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
+    currentTurn++;
+  } else {
+    currentTurn = 0;
+    updateTurnOnHTML(currentTurn);
+    if (bottomPlayerElement.classList.contains("unclickable")) {
+      togglePlayerOPPlayability();
+    }
+  }
+}
+function makeBotPlay(usedTurn) {
+  let playableCards = getPlayableCardsByBot(usedTurn);
+  if (playableCards.length > 0) {
+    let chosenRandomCard =
+      playableCards[Math.floor(Math.random() * playableCards.length)];
+    flipCard(chosenRandomCard);
+    setTimeout(dispatchCardToDiscardPile, 1000, chosenRandomCard, usedTurn);
+    setTimeout(enableBots, 1500);
+  }
+}
+function getPlayableCardsByBot(usedTurn) {
+  const currentBot = getPlayerFromCurrentTurn(usedTurn);
+  const currentBotCards = currentBot.childNodes;
+  let playableCards = [];
+  currentBotCards.forEach((card) => {
+    if (checkIfCardIsPlayable(card.id)) {
+      playableCards.push(card);
+    }
+  });
+  return playableCards;
 }
 
+function togglePlayerOPPlayability() {
+  bottomPlayerElement.classList.toggle("unclickable");
+  deckElement.classList.toggle("unclickable");
+}
 function generateCard(card) {
   // get div main elements
   let cardContainerElement = document.createElement("div");
@@ -292,20 +341,7 @@ function dealCards() {
   function dealCard() {
     let cardElement = extractCardFromDeck();
     players[currentPlayer].currentCards.push(cardElement.id);
-    switch (currentPlayer) {
-      case 0:
-        playerToDealTo = bottomPlayerElement;
-        break;
-      case 1:
-        playerToDealTo = topPlayerElement;
-        break;
-      case 2:
-        playerToDealTo = leftPlayerElement;
-        break;
-      case 3:
-        playerToDealTo = rightPlayerElement;
-        break;
-    }
+    playerToDealTo = getPlayerFromCurrentTurn(currentPlayer);
     // add clickable functionality to main player's cards
     if (currentPlayer === 0) {
       cardElement.addEventListener("click", (e) => {
@@ -319,10 +355,22 @@ function dealCards() {
 
     // break the inverval
     if (currentPlayer === 4) currentPlayer = 0;
-    if (dealtCards === cardsPerPlayer * 4) {
+    if (dealtCards === cardsPerPlayer * numberOfPlayers) {
       clearInterval(id);
       flipMainPlayerCards();
     }
+  }
+}
+function getPlayerFromCurrentTurn(playerNumber) {
+  switch (playerNumber) {
+    case 0:
+      return bottomPlayerElement;
+    case 1:
+      return rightPlayerElement;
+    case 2:
+      return topPlayerElement;
+    case 3:
+      return leftPlayerElement;
   }
 }
 
@@ -364,6 +412,10 @@ function playCard(card) {
   let chosenCard = getChosenCard(card);
   if (checkIfCardIsPlayable(chosenCard.id)) {
     dispatchCardToDiscardPile(chosenCard);
+    setTimeout(() => {
+      currentTurn++;
+      enableBots();
+    }, 500);
   }
 }
 function getChosenCard(card) {
@@ -373,17 +425,27 @@ function getChosenCard(card) {
   return card;
 }
 
-function dispatchCardToDiscardPile(cardElement) {
+function dispatchCardToDiscardPile(cardElement, setTurn = undefined) {
   let removedCard;
   cardElement.classList.toggle("remove");
   setTimeout(() => {
-    removedCard = bottomPlayerElement.removeChild(cardElement);
+    // usedTurn helps to dispatch cards by both the user and the bots
+    let usedTurn = setTurn === undefined ? currentTurn : setTurn;
+    let playerToRemoveCardFrom = getPlayerFromCurrentTurn(usedTurn);
+    removedCard = playerToRemoveCardFrom.removeChild(cardElement);
+    updateCardList(removedCard.id, setTurn);
     removedCard.classList.toggle("in-deck");
     addChildElement(discardPileElement, removedCard);
     setTimeout(() => {
       removedCard.classList.toggle("remove");
     }, 50);
   }, 300); // 300 is the duration of the animation (0.3s)
+}
+function updateCardList(cardId, setTurn) {
+  let usedTurn = setTurn === undefined ? currentTurn : setTurn;
+  players[usedTurn].currentCards = players[usedTurn].currentCards.filter(
+    (item) => item !== cardId
+  );
 }
 
 function checkIfCardIsPlayable(cardId) {
@@ -395,10 +457,7 @@ function checkIfCardIsPlayable(cardId) {
   let binCardIds = topcardDiscardPileId.split(" ");
   let chosenCardIds = cardId.split(" ");
   // first come the color, then the type, then the value/action
-  if (
-    topcardDiscardPileId[0] === "black-wild" ||
-    topcardDiscardPileId[0] === "four-wild"
-  ) {
+  if (binCardIds[0] === "black-wild" || binCardIds[0] === "four-wild") {
     // if a wild or wild draw four is atop the discard pile, any card card can be used (CHANGE THIS LATER!)
     return true;
   } else if (
@@ -429,7 +488,9 @@ function drawCard() {
   cardFromDeck.addEventListener("click", (e) => {
     playCard(e.target);
   });
-  addChildElement(bottomPlayerElement, cardFromDeck);
+  let playerToDealTo = getPlayerFromCurrentTurn(currentTurn);
+  players[currentTurn].currentCards.push(cardFromDeck.id);
+  addChildElement(playerToDealTo, cardFromDeck);
   setTimeout(flipCard, 50, cardFromDeck);
 }
 
@@ -440,6 +501,17 @@ function toggleVariablesVisibility() {
     element.classList.toggle("invisible");
   });
   playButtonElement.classList.toggle("invisible");
+}
+
+// turns functionality
+function setStartingTurn() {
+  currentTurn = randomizeStartingTurn();
+}
+function randomizeStartingTurn() {
+  return Math.floor(Math.random() * numberOfPlayers);
+}
+function updateTurnOnHTML(currentTurn) {
+  currentTurnElement.innerText = `Current Turn: ${players[currentTurn].player}`;
 }
 
 // utility functions
@@ -454,4 +526,7 @@ function addIdToElement(elem, id) {
 }
 function addChildElement(parentElem, childElem) {
   parentElem.appendChild(childElem);
+}
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

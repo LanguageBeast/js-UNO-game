@@ -193,7 +193,7 @@ body {
   margin-inline: calc(var(--board-width) * 0.65 - 18px);
 }
 .player-top-name {
-  top: calc(var(--board-height) / 2 - 36px);
+  top: calc(var(--board-height) * 0.6 - 36px);
   margin-inline: calc(var(--board-width) / 2 - 55px);
 }
 .player-bottom-name {
@@ -387,6 +387,9 @@ body {
   100% {
     opacity: 0;
   }
+}
+.pointer {
+  cursor: pointer;
 }
 .unclickable {
   pointer-events: none;
