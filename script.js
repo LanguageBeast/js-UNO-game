@@ -19,10 +19,11 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 1;
+const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
+let lastSpecialCardPlayed = "";
 
 // objects
 let hasCurrentPlayerDrawnCard;
@@ -185,14 +186,18 @@ function startGame() {
 function nextPlay() {
   togglePlayerOPPlayability();
   hasCurrentPlayerDrawnCard = false;
-  if (currentTurn < numberOfPlayers && currentTurn > 0) {
-    updateTurnOnHTML(currentTurn);
-    setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
-    handleNextTurn();
+  if (lastSpecialCardPlayed === "skip") {
+    handleSpecialCard();
   } else {
-    updateTurnOnHTML(currentTurn);
-    if (bottomPlayerElement.classList.contains("unclickable")) {
-      togglePlayerOPPlayability();
+    if (currentTurn < numberOfPlayers && currentTurn > 0) {
+      updateTurnOnHTML(currentTurn);
+      setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
+      handleNextTurn();
+    } else {
+      updateTurnOnHTML(currentTurn);
+      if (bottomPlayerElement.classList.contains("unclickable")) {
+        togglePlayerOPPlayability();
+      }
     }
   }
 }
@@ -218,7 +223,7 @@ function makeNormalBotPlay(usedTurn) {
   }
   setTimeout(nextPlay, 1500);
 }
-function handleNextTurn(shouldSkipCurrentPlayer = false) {
+function handleNextTurn() {
   if ((turnFlow = "right")) {
     currentTurn++;
     if (currentTurn > 3) {
@@ -472,6 +477,7 @@ function dispatchCardToDiscardPile(cardElement, setTurn = undefined) {
     removedCard = playerToRemoveCardFrom.removeChild(cardElement);
     updateCardList(removedCard.id, setTurn);
     removedCard.classList.toggle("in-deck");
+    checkIfSpecial(removedCard.id);
     addChildElement(discardPileElement, removedCard);
     setTimeout(() => {
       removedCard.classList.toggle("remove");
@@ -565,10 +571,43 @@ function setStartingTurn() {
   currentTurn = randomizeStartingTurn();
 }
 function randomizeStartingTurn() {
-  return Math.floor(Math.random() * numberOfPlayers);
+  // return Math.floor(Math.random() * numberOfPlayers);
+  return 0;
 }
 function updateTurnOnHTML(currentTurn) {
   currentTurnElement.innerText = `Current Turn: ${players[currentTurn].player}`;
+}
+
+// special cards
+function checkIfSpecial(cardId) {
+  let cardParts = cardId.split(" ");
+  if (cardParts[1] === "special") {
+    lastSpecialCardPlayed = cardParts[2];
+  }
+}
+function handleSpecialCard(usedTurn) {
+  switch (lastSpecialCardPlayed) {
+    case "skip":
+      handleSkipCard();
+      break;
+    // case specialCardId.includes("reverse"):
+    //   handleReverseCard();
+    //   break;
+    // case specialCardId.includes("wild"):
+    //   handleWildCard();
+    //   break;
+    // case specialCardId.includes("draw-two"):
+    //   handleDrawTwoCard(usedTurn);
+    //   break;
+    // case specialCardId.includes("wild-draw-four"):
+    //   handleWildDrawFourCard(usedTurn);
+    //   break;
+  }
+}
+function handleSkipCard() {
+  handleNextTurn();
+  lastSpecialCardPlayed = "";
+  setTimeout(nextPlay, 500);
 }
 
 // utility functions
