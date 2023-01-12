@@ -19,7 +19,7 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 7;
+const cardsPerPlayer = 1;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
@@ -185,12 +185,11 @@ function startGame() {
 function nextPlay() {
   togglePlayerOPPlayability();
   hasCurrentPlayerDrawnCard = false;
-  if (currentTurn < numberOfPlayers) {
+  if (currentTurn < numberOfPlayers && currentTurn > 0) {
     updateTurnOnHTML(currentTurn);
     setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
     handleNextTurn();
   } else {
-    currentTurn = 0;
     updateTurnOnHTML(currentTurn);
     if (bottomPlayerElement.classList.contains("unclickable")) {
       togglePlayerOPPlayability();
@@ -220,23 +219,15 @@ function makeNormalBotPlay(usedTurn) {
   setTimeout(nextPlay, 1500);
 }
 function handleNextTurn(shouldSkipCurrentPlayer = false) {
-  if (!shouldSkipCurrentPlayer) {
-    if ((turnFlow = "right")) {
-      currentTurn++;
-    } else {
-      currentTurn--;
+  if ((turnFlow = "right")) {
+    currentTurn++;
+    if (currentTurn > 3) {
+      currentTurn -= 4;
     }
   } else {
-    if ((turnFlow = "right")) {
-      currentTurn += 2;
-      if (currentTurn > 3) {
-        currentTurn -= 4;
-      }
-    } else {
-      currentTurn -= 2;
-      if (currentTurn < 0) {
-        currentTurn += 4;
-      }
+    currentTurn--;
+    if (currentTurn < 0) {
+      currentTurn += 4;
     }
   }
 }
