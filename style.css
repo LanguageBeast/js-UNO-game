@@ -90,17 +90,17 @@ body {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-template-areas:
-    "topname top top top rightname"
+    "leftBtn top top top topBtn"
     "left z z z right"
     "left 1 center 2 right"
     "left x x x right"
-    "leftname bottom bottom bottom bottomname";
+    "bottomBtn bottom bottom bottom rightBtn";
   margin-inline: auto;
   width: var(--board-width);
   height: var(--board-height);
   border-radius: 50px;
   background-color: var(--board-color);
-  margin-block: 5rem;
+  margin-block: 5rem 2.5rem;
 }
 .board::before {
   content: "";
@@ -363,6 +363,20 @@ body {
 .four-value {
   transform: rotate(48deg) translateX(8px);
   color: white;
+}
+
+/* pass turn button */
+.pass-turn {
+  display: block;
+  margin-inline: auto;
+  width: 100px;
+  height: 40px;
+  font-weight: bold;
+  letter-spacing: 1.1px;
+  background: var(--bg-color);
+  color: var(--card-bg-color);
+  border-radius: 10px;
+  margin-block: 1rem;
 }
 
 /* util */

@@ -7,6 +7,7 @@ const topPlayerElement = document.querySelector(".player-top");
 const leftPlayerElement = document.querySelector(".player-left");
 const rightPlayerElement = document.querySelector(".player-right");
 const playButtonElement = document.querySelector(".play-button");
+const passTurnButtonElement = document.querySelector(".pass-turn");
 let allCardsInDeck;
 let cardsInDeck;
 
@@ -170,9 +171,11 @@ function startGame() {
   dealCards();
   startDiscardPile();
   enableDeck();
+  enableButtons();
   toggleVariablesVisibility();
   setStartingTurn();
   updateTurnOnHTML(currentTurn);
+
   hasCurrentPlayerDrawnCard = false;
   if (currentTurn !== 0) {
     setTimeout(enableBots, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
@@ -235,6 +238,7 @@ function getPlayableCardsByBot(usedTurn) {
 function togglePlayerOPPlayability() {
   bottomPlayerElement.classList.toggle("unclickable");
   deckElement.classList.toggle("unclickable");
+  passTurnButtonElement.classList.toggle("unclickable");
 }
 function generateCard(card) {
   // get div main elements
@@ -530,6 +534,15 @@ function toggleVariablesVisibility() {
     element.classList.toggle("invisible");
   });
   playButtonElement.classList.toggle("invisible");
+}
+
+// turn on all buttons
+function enableButtons() {
+  passTurnButtonElement.addEventListener("click", passTurn);
+}
+function passTurn() {
+  currentTurn++;
+  enableBots();
 }
 
 // turns functionality
