@@ -22,6 +22,7 @@ const numberOfPlayers = 4;
 const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
+let turnFlow = "right";
 
 // objects
 let hasCurrentPlayerDrawnCard;
@@ -175,20 +176,19 @@ function startGame() {
   toggleVariablesVisibility();
   setStartingTurn();
   updateTurnOnHTML(currentTurn);
-
   hasCurrentPlayerDrawnCard = false;
   if (currentTurn !== 0) {
-    setTimeout(enableBots, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
+    setTimeout(nextPlay, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
   }
 }
 // make the computer play
-function enableBots() {
+function nextPlay() {
   togglePlayerOPPlayability();
   hasCurrentPlayerDrawnCard = false;
   if (currentTurn < numberOfPlayers) {
     updateTurnOnHTML(currentTurn);
     setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
-    currentTurn++;
+    handleNextTurn();
   } else {
     currentTurn = 0;
     updateTurnOnHTML(currentTurn);
@@ -198,6 +198,9 @@ function enableBots() {
   }
 }
 function makeBotPlay(usedTurn) {
+  makeNormalBotPlay(usedTurn);
+}
+function makeNormalBotPlay(usedTurn) {
   let chosenRandomCard;
   let playableCards = getPlayableCardsByBot(usedTurn);
   if (playableCards.length > 0) {
@@ -211,10 +214,31 @@ function makeBotPlay(usedTurn) {
     }
   }
   if (chosenRandomCard) {
-    setTimeout(flipCard, 100, chosenRandomCard);
+    setTimeout(flipCard, 500, chosenRandomCard);
     setTimeout(dispatchCardToDiscardPile, 1000, chosenRandomCard, usedTurn);
   }
-  setTimeout(enableBots, 1500);
+  setTimeout(nextPlay, 1500);
+}
+function handleNextTurn(shouldSkipCurrentPlayer = false) {
+  if (!shouldSkipCurrentPlayer) {
+    if ((turnFlow = "right")) {
+      currentTurn++;
+    } else {
+      currentTurn--;
+    }
+  } else {
+    if ((turnFlow = "right")) {
+      currentTurn += 2;
+      if (currentTurn > 3) {
+        currentTurn -= 4;
+      }
+    } else {
+      currentTurn -= 2;
+      if (currentTurn < 0) {
+        currentTurn += 4;
+      }
+    }
+  }
 }
 function getPlayableCardsByBot(usedTurn) {
   const currentBot = getPlayerFromCurrentTurn(usedTurn);
@@ -435,8 +459,8 @@ function playCard(card) {
   if (checkIfCardIsPlayable(chosenCard.id)) {
     dispatchCardToDiscardPile(chosenCard);
     setTimeout(() => {
-      currentTurn++;
-      enableBots();
+      handleNextTurn();
+      nextPlay();
     }, 500);
   }
 }
@@ -541,8 +565,8 @@ function enableButtons() {
   passTurnButtonElement.addEventListener("click", passTurn);
 }
 function passTurn() {
-  currentTurn++;
-  enableBots();
+  handleNextTurn();
+  nextPlay();
 }
 
 // turns functionality
