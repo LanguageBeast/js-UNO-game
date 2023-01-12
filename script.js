@@ -19,7 +19,7 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 7;
+const cardsPerPlayer = 3;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
@@ -28,82 +28,82 @@ let lastSpecialCardPlayed = "";
 // objects
 let hasCurrentPlayerDrawnCard;
 const cards = [
-  { color: "red", type: "number", value: 0 },
-  { color: "red", type: "number", value: 1 },
-  { color: "red", type: "number", value: 2 },
-  { color: "red", type: "number", value: 3 },
-  { color: "red", type: "number", value: 4 },
-  { color: "red", type: "number", value: 5 },
-  { color: "red", type: "number", value: 6 },
-  { color: "red", type: "number", value: 7 },
-  { color: "red", type: "number", value: 8 },
-  { color: "red", type: "number", value: 9 },
-  { color: "red", type: "number", value: 1 },
-  { color: "red", type: "number", value: 2 },
-  { color: "red", type: "number", value: 3 },
-  { color: "red", type: "number", value: 4 },
-  { color: "red", type: "number", value: 5 },
-  { color: "red", type: "number", value: 6 },
-  { color: "red", type: "number", value: 7 },
-  { color: "red", type: "number", value: 8 },
-  { color: "red", type: "number", value: 9 },
-  { color: "green", type: "number", value: 0 },
-  { color: "green", type: "number", value: 1 },
-  { color: "green", type: "number", value: 2 },
-  { color: "green", type: "number", value: 3 },
-  { color: "green", type: "number", value: 4 },
-  { color: "green", type: "number", value: 5 },
-  { color: "green", type: "number", value: 6 },
-  { color: "green", type: "number", value: 7 },
-  { color: "green", type: "number", value: 8 },
-  { color: "green", type: "number", value: 9 },
-  { color: "green", type: "number", value: 1 },
-  { color: "green", type: "number", value: 2 },
-  { color: "green", type: "number", value: 3 },
-  { color: "green", type: "number", value: 4 },
-  { color: "green", type: "number", value: 5 },
-  { color: "green", type: "number", value: 6 },
-  { color: "green", type: "number", value: 7 },
-  { color: "green", type: "number", value: 8 },
-  { color: "green", type: "number", value: 9 },
-  { color: "blue", type: "number", value: 0 },
-  { color: "blue", type: "number", value: 1 },
-  { color: "blue", type: "number", value: 2 },
-  { color: "blue", type: "number", value: 3 },
-  { color: "blue", type: "number", value: 4 },
-  { color: "blue", type: "number", value: 5 },
-  { color: "blue", type: "number", value: 6 },
-  { color: "blue", type: "number", value: 7 },
-  { color: "blue", type: "number", value: 8 },
-  { color: "blue", type: "number", value: 9 },
-  { color: "blue", type: "number", value: 1 },
-  { color: "blue", type: "number", value: 2 },
-  { color: "blue", type: "number", value: 3 },
-  { color: "blue", type: "number", value: 4 },
-  { color: "blue", type: "number", value: 5 },
-  { color: "blue", type: "number", value: 6 },
-  { color: "blue", type: "number", value: 7 },
-  { color: "blue", type: "number", value: 8 },
-  { color: "blue", type: "number", value: 9 },
-  { color: "yellow", type: "number", value: 0 },
-  { color: "yellow", type: "number", value: 1 },
-  { color: "yellow", type: "number", value: 2 },
-  { color: "yellow", type: "number", value: 3 },
-  { color: "yellow", type: "number", value: 4 },
-  { color: "yellow", type: "number", value: 5 },
-  { color: "yellow", type: "number", value: 6 },
-  { color: "yellow", type: "number", value: 7 },
-  { color: "yellow", type: "number", value: 8 },
-  { color: "yellow", type: "number", value: 9 },
-  { color: "yellow", type: "number", value: 1 },
-  { color: "yellow", type: "number", value: 2 },
-  { color: "yellow", type: "number", value: 3 },
-  { color: "yellow", type: "number", value: 4 },
-  { color: "yellow", type: "number", value: 5 },
-  { color: "yellow", type: "number", value: 6 },
-  { color: "yellow", type: "number", value: 7 },
-  { color: "yellow", type: "number", value: 8 },
-  { color: "yellow", type: "number", value: 9 },
+  // { color: "red", type: "number", value: 0 },
+  // { color: "red", type: "number", value: 1 },
+  // { color: "red", type: "number", value: 2 },
+  // { color: "red", type: "number", value: 3 },
+  // { color: "red", type: "number", value: 4 },
+  // { color: "red", type: "number", value: 5 },
+  // { color: "red", type: "number", value: 6 },
+  // { color: "red", type: "number", value: 7 },
+  // { color: "red", type: "number", value: 8 },
+  // { color: "red", type: "number", value: 9 },
+  // { color: "red", type: "number", value: 1 },
+  // { color: "red", type: "number", value: 2 },
+  // { color: "red", type: "number", value: 3 },
+  // { color: "red", type: "number", value: 4 },
+  // { color: "red", type: "number", value: 5 },
+  // { color: "red", type: "number", value: 6 },
+  // { color: "red", type: "number", value: 7 },
+  // { color: "red", type: "number", value: 8 },
+  // { color: "red", type: "number", value: 9 },
+  // { color: "green", type: "number", value: 0 },
+  // { color: "green", type: "number", value: 1 },
+  // { color: "green", type: "number", value: 2 },
+  // { color: "green", type: "number", value: 3 },
+  // { color: "green", type: "number", value: 4 },
+  // { color: "green", type: "number", value: 5 },
+  // { color: "green", type: "number", value: 6 },
+  // { color: "green", type: "number", value: 7 },
+  // { color: "green", type: "number", value: 8 },
+  // { color: "green", type: "number", value: 9 },
+  // { color: "green", type: "number", value: 1 },
+  // { color: "green", type: "number", value: 2 },
+  // { color: "green", type: "number", value: 3 },
+  // { color: "green", type: "number", value: 4 },
+  // { color: "green", type: "number", value: 5 },
+  // { color: "green", type: "number", value: 6 },
+  // { color: "green", type: "number", value: 7 },
+  // { color: "green", type: "number", value: 8 },
+  // { color: "green", type: "number", value: 9 },
+  // { color: "blue", type: "number", value: 0 },
+  // { color: "blue", type: "number", value: 1 },
+  // { color: "blue", type: "number", value: 2 },
+  // { color: "blue", type: "number", value: 3 },
+  // { color: "blue", type: "number", value: 4 },
+  // { color: "blue", type: "number", value: 5 },
+  // { color: "blue", type: "number", value: 6 },
+  // { color: "blue", type: "number", value: 7 },
+  // { color: "blue", type: "number", value: 8 },
+  // { color: "blue", type: "number", value: 9 },
+  // { color: "blue", type: "number", value: 1 },
+  // { color: "blue", type: "number", value: 2 },
+  // { color: "blue", type: "number", value: 3 },
+  // { color: "blue", type: "number", value: 4 },
+  // { color: "blue", type: "number", value: 5 },
+  // { color: "blue", type: "number", value: 6 },
+  // { color: "blue", type: "number", value: 7 },
+  // { color: "blue", type: "number", value: 8 },
+  // { color: "blue", type: "number", value: 9 },
+  // { color: "yellow", type: "number", value: 0 },
+  // { color: "yellow", type: "number", value: 1 },
+  // { color: "yellow", type: "number", value: 2 },
+  // { color: "yellow", type: "number", value: 3 },
+  // { color: "yellow", type: "number", value: 4 },
+  // { color: "yellow", type: "number", value: 5 },
+  // { color: "yellow", type: "number", value: 6 },
+  // { color: "yellow", type: "number", value: 7 },
+  // { color: "yellow", type: "number", value: 8 },
+  // { color: "yellow", type: "number", value: 9 },
+  // { color: "yellow", type: "number", value: 1 },
+  // { color: "yellow", type: "number", value: 2 },
+  // { color: "yellow", type: "number", value: 3 },
+  // { color: "yellow", type: "number", value: 4 },
+  // { color: "yellow", type: "number", value: 5 },
+  // { color: "yellow", type: "number", value: 6 },
+  // { color: "yellow", type: "number", value: 7 },
+  // { color: "yellow", type: "number", value: 8 },
+  // { color: "yellow", type: "number", value: 9 },
   { color: "red", type: "special", value: "reverse" },
   { color: "red", type: "special", value: "reverse" },
   { color: "yellow", type: "special", value: "reverse" },
@@ -112,26 +112,26 @@ const cards = [
   { color: "green", type: "special", value: "reverse" },
   { color: "blue", type: "special", value: "reverse" },
   { color: "blue", type: "special", value: "reverse" },
-  { color: "red", type: "special", value: "skip" },
-  { color: "red", type: "special", value: "skip" },
-  { color: "yellow", type: "special", value: "skip" },
-  { color: "yellow", type: "special", value: "skip" },
-  { color: "green", type: "special", value: "skip" },
-  { color: "green", type: "special", value: "skip" },
-  { color: "blue", type: "special", value: "skip" },
-  { color: "blue", type: "special", value: "skip" },
+  // { color: "red", type: "special", value: "skip" },
+  // { color: "red", type: "special", value: "skip" },
+  // { color: "yellow", type: "special", value: "skip" },
+  // { color: "yellow", type: "special", value: "skip" },
+  // { color: "green", type: "special", value: "skip" },
+  // { color: "green", type: "special", value: "skip" },
+  // { color: "blue", type: "special", value: "skip" },
+  // { color: "blue", type: "special", value: "skip" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
-  { color: "red", type: "special", value: "draw-two" },
-  { color: "red", type: "special", value: "draw-two" },
-  { color: "yellow", type: "special", value: "draw-two" },
-  { color: "yellow", type: "special", value: "draw-two" },
-  { color: "green", type: "special", value: "draw-two" },
-  { color: "green", type: "special", value: "draw-two" },
-  { color: "blue", type: "special", value: "draw-two" },
-  { color: "blue", type: "special", value: "draw-two" },
+  // { color: "red", type: "special", value: "draw-two" },
+  // { color: "red", type: "special", value: "draw-two" },
+  // { color: "yellow", type: "special", value: "draw-two" },
+  // { color: "yellow", type: "special", value: "draw-two" },
+  // { color: "green", type: "special", value: "draw-two" },
+  // { color: "green", type: "special", value: "draw-two" },
+  // { color: "blue", type: "special", value: "draw-two" },
+  // { color: "blue", type: "special", value: "draw-two" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
@@ -186,8 +186,8 @@ function startGame() {
 function nextPlay() {
   togglePlayerOPPlayability();
   hasCurrentPlayerDrawnCard = false;
-  if (lastSpecialCardPlayed === "skip") {
-    handleSpecialCard();
+  if (lastSpecialCardPlayed === "skip" || lastSpecialCardPlayed === "reverse") {
+    handleSpecialCard(currentTurn);
   } else {
     if (currentTurn < numberOfPlayers && currentTurn > 0) {
       updateTurnOnHTML(currentTurn);
@@ -224,7 +224,7 @@ function makeNormalBotPlay(usedTurn) {
   setTimeout(nextPlay, 1500);
 }
 function handleNextTurn() {
-  if ((turnFlow = "right")) {
+  if (turnFlow === "right") {
     currentTurn++;
     if (currentTurn > 3) {
       currentTurn -= 4;
@@ -590,9 +590,9 @@ function handleSpecialCard(usedTurn) {
     case "skip":
       handleSkipCard();
       break;
-    // case specialCardId.includes("reverse"):
-    //   handleReverseCard();
-    //   break;
+    case "reverse":
+      handleReverseCard();
+      break;
     // case specialCardId.includes("wild"):
     //   handleWildCard();
     //   break;
@@ -605,6 +605,13 @@ function handleSpecialCard(usedTurn) {
   }
 }
 function handleSkipCard() {
+  handleNextTurn();
+  lastSpecialCardPlayed = "";
+  setTimeout(nextPlay, 500);
+}
+function handleReverseCard() {
+  turnFlow = turnFlow === "right" ? "left" : "right";
+  handleNextTurn();
   handleNextTurn();
   lastSpecialCardPlayed = "";
   setTimeout(nextPlay, 500);
