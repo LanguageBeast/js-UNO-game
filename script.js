@@ -19,7 +19,7 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 3;
+const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
@@ -28,82 +28,82 @@ let lastSpecialCardPlayed = "";
 // objects
 let hasCurrentPlayerDrawnCard;
 const cards = [
-  // { color: "red", type: "number", value: 0 },
-  // { color: "red", type: "number", value: 1 },
-  // { color: "red", type: "number", value: 2 },
-  // { color: "red", type: "number", value: 3 },
-  // { color: "red", type: "number", value: 4 },
-  // { color: "red", type: "number", value: 5 },
-  // { color: "red", type: "number", value: 6 },
-  // { color: "red", type: "number", value: 7 },
-  // { color: "red", type: "number", value: 8 },
-  // { color: "red", type: "number", value: 9 },
-  // { color: "red", type: "number", value: 1 },
-  // { color: "red", type: "number", value: 2 },
-  // { color: "red", type: "number", value: 3 },
-  // { color: "red", type: "number", value: 4 },
-  // { color: "red", type: "number", value: 5 },
-  // { color: "red", type: "number", value: 6 },
-  // { color: "red", type: "number", value: 7 },
-  // { color: "red", type: "number", value: 8 },
-  // { color: "red", type: "number", value: 9 },
-  // { color: "green", type: "number", value: 0 },
-  // { color: "green", type: "number", value: 1 },
-  // { color: "green", type: "number", value: 2 },
-  // { color: "green", type: "number", value: 3 },
-  // { color: "green", type: "number", value: 4 },
-  // { color: "green", type: "number", value: 5 },
-  // { color: "green", type: "number", value: 6 },
-  // { color: "green", type: "number", value: 7 },
-  // { color: "green", type: "number", value: 8 },
-  // { color: "green", type: "number", value: 9 },
-  // { color: "green", type: "number", value: 1 },
-  // { color: "green", type: "number", value: 2 },
-  // { color: "green", type: "number", value: 3 },
-  // { color: "green", type: "number", value: 4 },
-  // { color: "green", type: "number", value: 5 },
-  // { color: "green", type: "number", value: 6 },
-  // { color: "green", type: "number", value: 7 },
-  // { color: "green", type: "number", value: 8 },
-  // { color: "green", type: "number", value: 9 },
-  // { color: "blue", type: "number", value: 0 },
-  // { color: "blue", type: "number", value: 1 },
-  // { color: "blue", type: "number", value: 2 },
-  // { color: "blue", type: "number", value: 3 },
-  // { color: "blue", type: "number", value: 4 },
-  // { color: "blue", type: "number", value: 5 },
-  // { color: "blue", type: "number", value: 6 },
-  // { color: "blue", type: "number", value: 7 },
-  // { color: "blue", type: "number", value: 8 },
-  // { color: "blue", type: "number", value: 9 },
-  // { color: "blue", type: "number", value: 1 },
-  // { color: "blue", type: "number", value: 2 },
-  // { color: "blue", type: "number", value: 3 },
-  // { color: "blue", type: "number", value: 4 },
-  // { color: "blue", type: "number", value: 5 },
-  // { color: "blue", type: "number", value: 6 },
-  // { color: "blue", type: "number", value: 7 },
-  // { color: "blue", type: "number", value: 8 },
-  // { color: "blue", type: "number", value: 9 },
-  // { color: "yellow", type: "number", value: 0 },
-  // { color: "yellow", type: "number", value: 1 },
-  // { color: "yellow", type: "number", value: 2 },
-  // { color: "yellow", type: "number", value: 3 },
-  // { color: "yellow", type: "number", value: 4 },
-  // { color: "yellow", type: "number", value: 5 },
-  // { color: "yellow", type: "number", value: 6 },
-  // { color: "yellow", type: "number", value: 7 },
-  // { color: "yellow", type: "number", value: 8 },
-  // { color: "yellow", type: "number", value: 9 },
-  // { color: "yellow", type: "number", value: 1 },
-  // { color: "yellow", type: "number", value: 2 },
-  // { color: "yellow", type: "number", value: 3 },
-  // { color: "yellow", type: "number", value: 4 },
-  // { color: "yellow", type: "number", value: 5 },
-  // { color: "yellow", type: "number", value: 6 },
-  // { color: "yellow", type: "number", value: 7 },
-  // { color: "yellow", type: "number", value: 8 },
-  // { color: "yellow", type: "number", value: 9 },
+  { color: "red", type: "number", value: 0 },
+  { color: "red", type: "number", value: 1 },
+  { color: "red", type: "number", value: 2 },
+  { color: "red", type: "number", value: 3 },
+  { color: "red", type: "number", value: 4 },
+  { color: "red", type: "number", value: 5 },
+  { color: "red", type: "number", value: 6 },
+  { color: "red", type: "number", value: 7 },
+  { color: "red", type: "number", value: 8 },
+  { color: "red", type: "number", value: 9 },
+  { color: "red", type: "number", value: 1 },
+  { color: "red", type: "number", value: 2 },
+  { color: "red", type: "number", value: 3 },
+  { color: "red", type: "number", value: 4 },
+  { color: "red", type: "number", value: 5 },
+  { color: "red", type: "number", value: 6 },
+  { color: "red", type: "number", value: 7 },
+  { color: "red", type: "number", value: 8 },
+  { color: "red", type: "number", value: 9 },
+  { color: "green", type: "number", value: 0 },
+  { color: "green", type: "number", value: 1 },
+  { color: "green", type: "number", value: 2 },
+  { color: "green", type: "number", value: 3 },
+  { color: "green", type: "number", value: 4 },
+  { color: "green", type: "number", value: 5 },
+  { color: "green", type: "number", value: 6 },
+  { color: "green", type: "number", value: 7 },
+  { color: "green", type: "number", value: 8 },
+  { color: "green", type: "number", value: 9 },
+  { color: "green", type: "number", value: 1 },
+  { color: "green", type: "number", value: 2 },
+  { color: "green", type: "number", value: 3 },
+  { color: "green", type: "number", value: 4 },
+  { color: "green", type: "number", value: 5 },
+  { color: "green", type: "number", value: 6 },
+  { color: "green", type: "number", value: 7 },
+  { color: "green", type: "number", value: 8 },
+  { color: "green", type: "number", value: 9 },
+  { color: "blue", type: "number", value: 0 },
+  { color: "blue", type: "number", value: 1 },
+  { color: "blue", type: "number", value: 2 },
+  { color: "blue", type: "number", value: 3 },
+  { color: "blue", type: "number", value: 4 },
+  { color: "blue", type: "number", value: 5 },
+  { color: "blue", type: "number", value: 6 },
+  { color: "blue", type: "number", value: 7 },
+  { color: "blue", type: "number", value: 8 },
+  { color: "blue", type: "number", value: 9 },
+  { color: "blue", type: "number", value: 1 },
+  { color: "blue", type: "number", value: 2 },
+  { color: "blue", type: "number", value: 3 },
+  { color: "blue", type: "number", value: 4 },
+  { color: "blue", type: "number", value: 5 },
+  { color: "blue", type: "number", value: 6 },
+  { color: "blue", type: "number", value: 7 },
+  { color: "blue", type: "number", value: 8 },
+  { color: "blue", type: "number", value: 9 },
+  { color: "yellow", type: "number", value: 0 },
+  { color: "yellow", type: "number", value: 1 },
+  { color: "yellow", type: "number", value: 2 },
+  { color: "yellow", type: "number", value: 3 },
+  { color: "yellow", type: "number", value: 4 },
+  { color: "yellow", type: "number", value: 5 },
+  { color: "yellow", type: "number", value: 6 },
+  { color: "yellow", type: "number", value: 7 },
+  { color: "yellow", type: "number", value: 8 },
+  { color: "yellow", type: "number", value: 9 },
+  { color: "yellow", type: "number", value: 1 },
+  { color: "yellow", type: "number", value: 2 },
+  { color: "yellow", type: "number", value: 3 },
+  { color: "yellow", type: "number", value: 4 },
+  { color: "yellow", type: "number", value: 5 },
+  { color: "yellow", type: "number", value: 6 },
+  { color: "yellow", type: "number", value: 7 },
+  { color: "yellow", type: "number", value: 8 },
+  { color: "yellow", type: "number", value: 9 },
   { color: "red", type: "special", value: "reverse" },
   { color: "red", type: "special", value: "reverse" },
   { color: "yellow", type: "special", value: "reverse" },
@@ -112,26 +112,26 @@ const cards = [
   { color: "green", type: "special", value: "reverse" },
   { color: "blue", type: "special", value: "reverse" },
   { color: "blue", type: "special", value: "reverse" },
-  // { color: "red", type: "special", value: "skip" },
-  // { color: "red", type: "special", value: "skip" },
-  // { color: "yellow", type: "special", value: "skip" },
-  // { color: "yellow", type: "special", value: "skip" },
-  // { color: "green", type: "special", value: "skip" },
-  // { color: "green", type: "special", value: "skip" },
-  // { color: "blue", type: "special", value: "skip" },
-  // { color: "blue", type: "special", value: "skip" },
+  { color: "red", type: "special", value: "skip" },
+  { color: "red", type: "special", value: "skip" },
+  { color: "yellow", type: "special", value: "skip" },
+  { color: "yellow", type: "special", value: "skip" },
+  { color: "green", type: "special", value: "skip" },
+  { color: "green", type: "special", value: "skip" },
+  { color: "blue", type: "special", value: "skip" },
+  { color: "blue", type: "special", value: "skip" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
-  // { color: "red", type: "special", value: "draw-two" },
-  // { color: "red", type: "special", value: "draw-two" },
-  // { color: "yellow", type: "special", value: "draw-two" },
-  // { color: "yellow", type: "special", value: "draw-two" },
-  // { color: "green", type: "special", value: "draw-two" },
-  // { color: "green", type: "special", value: "draw-two" },
-  // { color: "blue", type: "special", value: "draw-two" },
-  // { color: "blue", type: "special", value: "draw-two" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
@@ -186,7 +186,11 @@ function startGame() {
 function nextPlay() {
   togglePlayerOPPlayability();
   hasCurrentPlayerDrawnCard = false;
-  if (lastSpecialCardPlayed === "skip" || lastSpecialCardPlayed === "reverse") {
+  if (
+    lastSpecialCardPlayed === "skip" ||
+    lastSpecialCardPlayed === "reverse" ||
+    lastSpecialCardPlayed === "draw-two"
+  ) {
     handleSpecialCard(currentTurn);
   } else {
     if (currentTurn < numberOfPlayers && currentTurn > 0) {
@@ -202,9 +206,6 @@ function nextPlay() {
   }
 }
 function makeBotPlay(usedTurn) {
-  makeNormalBotPlay(usedTurn);
-}
-function makeNormalBotPlay(usedTurn) {
   let chosenRandomCard;
   let playableCards = getPlayableCardsByBot(usedTurn);
   if (playableCards.length > 0) {
@@ -237,7 +238,7 @@ function handleNextTurn() {
   }
 }
 function getPlayableCardsByBot(usedTurn) {
-  const currentBot = getPlayerFromCurrentTurn(usedTurn);
+  const currentBot = getPlayer(usedTurn);
   let playableCards = [];
   if (!hasCurrentPlayerDrawnCard) {
     let currentBotCards = currentBot.childNodes;
@@ -383,7 +384,7 @@ function dealCards() {
   function dealCard() {
     let cardElement = extractCardFromDeck();
     players[currentPlayer].currentCards.push(cardElement.id);
-    playerToDealTo = getPlayerFromCurrentTurn(currentPlayer);
+    playerToDealTo = getPlayer(currentPlayer);
     // add clickable functionality to main player's cards
     if (currentPlayer === 0) {
       cardElement.addEventListener("click", (e) => {
@@ -403,7 +404,7 @@ function dealCards() {
     }
   }
 }
-function getPlayerFromCurrentTurn(playerNumber) {
+function getPlayer(playerNumber) {
   switch (playerNumber) {
     case 0:
       return bottomPlayerElement;
@@ -473,7 +474,7 @@ function dispatchCardToDiscardPile(cardElement, setTurn = undefined) {
   setTimeout(() => {
     // usedTurn helps to dispatch cards by both the user and the bots
     let usedTurn = setTurn === undefined ? currentTurn : setTurn;
-    let playerToRemoveCardFrom = getPlayerFromCurrentTurn(usedTurn);
+    let playerToRemoveCardFrom = getPlayer(usedTurn);
     removedCard = playerToRemoveCardFrom.removeChild(cardElement);
     updateCardList(removedCard.id, setTurn);
     removedCard.classList.toggle("in-deck");
@@ -528,6 +529,7 @@ function drawCard(usedTurn) {
   if (!hasCurrentPlayerDrawnCard) {
     let setTurn;
     if (typeof usedTurn !== "number") {
+      // this checks for 'event' parameter when clicking on the deck
       setTurn = currentTurn;
     } else {
       setTurn = usedTurn;
@@ -538,7 +540,7 @@ function drawCard(usedTurn) {
     cardFromDeck.addEventListener("click", (e) => {
       playCard(e.target);
     });
-    let playerToDealTo = getPlayerFromCurrentTurn(setTurn);
+    let playerToDealTo = getPlayer(setTurn);
     players[setTurn].currentCards.push(cardFromDeck.id);
     addChildElement(playerToDealTo, cardFromDeck);
     if (setTurn === 0) {
@@ -571,8 +573,7 @@ function setStartingTurn() {
   currentTurn = randomizeStartingTurn();
 }
 function randomizeStartingTurn() {
-  // return Math.floor(Math.random() * numberOfPlayers);
-  return 0;
+  return Math.floor(Math.random() * numberOfPlayers);
 }
 function updateTurnOnHTML(currentTurn) {
   currentTurnElement.innerText = `Current Turn: ${players[currentTurn].player}`;
@@ -586,6 +587,7 @@ function checkIfSpecial(cardId) {
   }
 }
 function handleSpecialCard(usedTurn) {
+  // remember that handleNextTurn() is always called regardless of any special card!
   switch (lastSpecialCardPlayed) {
     case "skip":
       handleSkipCard();
@@ -593,12 +595,12 @@ function handleSpecialCard(usedTurn) {
     case "reverse":
       handleReverseCard();
       break;
-    // case specialCardId.includes("wild"):
+    // case "wild":
     //   handleWildCard();
     //   break;
-    // case specialCardId.includes("draw-two"):
-    //   handleDrawTwoCard(usedTurn);
-    //   break;
+    case "draw-two":
+      handleDrawTwoCard(usedTurn);
+      break;
     // case specialCardId.includes("wild-draw-four"):
     //   handleWildDrawFourCard(usedTurn);
     //   break;
@@ -616,7 +618,15 @@ function handleReverseCard() {
   lastSpecialCardPlayed = "";
   setTimeout(nextPlay, 500);
 }
-
+function handleDrawTwoCard(usedTurn) {
+  for (let i = 0; i < 2; i++) {
+    drawCard(usedTurn);
+    hasCurrentPlayerDrawnCard = false;
+  }
+  handleNextTurn();
+  lastSpecialCardPlayed = "";
+  setTimeout(nextPlay, 500);
+}
 // utility functions
 function createElement(elemType) {
   return document.createElement(elemType);
