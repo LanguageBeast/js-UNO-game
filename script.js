@@ -110,50 +110,38 @@ const cards = [
   { color: "yellow", type: "number", value: 7 },
   { color: "yellow", type: "number", value: 8 },
   { color: "yellow", type: "number", value: 9 },
-  // { color: "red", type: "special", value: "reverse" },
-  // { color: "red", type: "special", value: "reverse" },
-  // { color: "yellow", type: "special", value: "reverse" },
-  // { color: "yellow", type: "special", value: "reverse" },
-  // { color: "green", type: "special", value: "reverse" },
-  // { color: "green", type: "special", value: "reverse" },
-  // { color: "blue", type: "special", value: "reverse" },
-  // { color: "blue", type: "special", value: "reverse" },
-  // { color: "red", type: "special", value: "skip" },
-  // { color: "red", type: "special", value: "skip" },
-  // { color: "yellow", type: "special", value: "skip" },
-  // { color: "yellow", type: "special", value: "skip" },
-  // { color: "green", type: "special", value: "skip" },
-  // { color: "green", type: "special", value: "skip" },
-  // { color: "blue", type: "special", value: "skip" },
-  // { color: "blue", type: "special", value: "skip" },
+  { color: "red", type: "special", value: "reverse" },
+  { color: "red", type: "special", value: "reverse" },
+  { color: "yellow", type: "special", value: "reverse" },
+  { color: "yellow", type: "special", value: "reverse" },
+  { color: "green", type: "special", value: "reverse" },
+  { color: "green", type: "special", value: "reverse" },
+  { color: "blue", type: "special", value: "reverse" },
+  { color: "blue", type: "special", value: "reverse" },
+  { color: "red", type: "special", value: "skip" },
+  { color: "red", type: "special", value: "skip" },
+  { color: "yellow", type: "special", value: "skip" },
+  { color: "yellow", type: "special", value: "skip" },
+  { color: "green", type: "special", value: "skip" },
+  { color: "green", type: "special", value: "skip" },
+  { color: "blue", type: "special", value: "skip" },
+  { color: "blue", type: "special", value: "skip" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" }, ///////
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" },
-  // { color: "red", type: "special", value: "draw-two" },
-  // { color: "red", type: "special", value: "draw-two" },
-  // { color: "yellow", type: "special", value: "draw-two" },
-  // { color: "yellow", type: "special", value: "draw-two" },
-  // { color: "green", type: "special", value: "draw-two" },
-  // { color: "green", type: "special", value: "draw-two" },
-  // { color: "blue", type: "special", value: "draw-two" },
-  // { color: "blue", type: "special", value: "draw-two" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
-  // { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
+  { color: "four-wild", type: "special", value: "wild-draw-four" }, ////
 ];
 
 // players
@@ -212,12 +200,7 @@ function nextPlay() {
     togglePlayerOPPlayability();
   }
   hasCurrentPlayerDrawnCard = false;
-  if (
-    lastSpecialCardPlayed === "skip" ||
-    lastSpecialCardPlayed === "reverse" ||
-    lastSpecialCardPlayed === "draw-two" ||
-    lastSpecialCardPlayed === "wild"
-  ) {
+  if (lastSpecialCardPlayed) {
     handleSpecialCard(currentTurn);
   } else {
     if (currentTurn < numberOfPlayers && currentTurn > 0) {
@@ -549,7 +532,13 @@ function checkIfCardIsPlayable(cardId) {
     }
   } else {
     // no wild has been played
-    if (chosenCardIds[2] === "wild" || chosenCardIds[2] === "wild-draw-four") {
+    if (binCardIds[2] === "wild" || binCardIds[2] === "wild-draw-four") {
+      // this can only happen in case the bin starts with any wild
+      return true;
+    } else if (
+      chosenCardIds[2] === "wild" ||
+      chosenCardIds[2] === "wild-draw-four"
+    ) {
       return true; // wilds or wild draw four can be used everywhere
     } else if (binCardIds[0] === chosenCardIds[0]) {
       return true; // both are the same color
@@ -645,9 +634,9 @@ function handleSpecialCard(usedTurn) {
     case "draw-two":
       handleDrawTwoCard(usedTurn);
       break;
-    // case specialCardId.includes("wild-draw-four"):
-    //   handleWildDrawFourCard(usedTurn);
-    //   break;
+    case "wild-draw-four":
+      handleWildDrawFourCard(usedTurn);
+      break;
   }
 }
 function handleSkipCard() {
@@ -678,15 +667,31 @@ function handleWildCard(usedTurn) {
     toggleColorSelect();
   } else {
     // randomize color (maybe i'll change it later!)
-    let randomColor = colors[Math.floor(Math.random() * colors.length)];
-    updateCurrentColor(randomColor);
-    chosenColor = randomColor;
-    setTimeout(nextPlay, 500);
+    handleColorByBot();
   }
   lastSpecialCardPlayed = "";
 }
-
+function handleWildDrawFourCard(usedTurn) {
+  for (let i = 0; i < 4; i++) {
+    drawCard(usedTurn);
+    hasCurrentPlayerDrawnCard = false;
+  }
+  if (usedTurn === 1) {
+    togglePlayerOPPlayability();
+    toggleColorSelect();
+  } else {
+    handleColorByBot();
+  }
+  handleNextTurn();
+  lastSpecialCardPlayed = "";
+}
 // handle current color and color choosing
+function handleColorByBot() {
+  let randomColor = colors[Math.floor(Math.random() * colors.length)];
+  updateCurrentColor(randomColor);
+  chosenColor = randomColor;
+  setTimeout(nextPlay, 500);
+}
 function updateCurrentColor(cardId) {
   const cardParts = cardId.split(" ");
   const color = cardParts[0];
