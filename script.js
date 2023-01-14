@@ -661,7 +661,10 @@ function handleDrawTwoCard(usedTurn) {
   setTimeout(nextPlay, 500);
 }
 function handleWildCard(usedTurn) {
-  if (usedTurn === 1) {
+  if (
+    (usedTurn === 1 && turnFlow === "right") ||
+    (usedTurn === 3 && turnFlow === "left")
+  ) {
     // main player
     togglePlayerOPPlayability();
     toggleColorSelect();
@@ -676,7 +679,10 @@ function handleWildDrawFourCard(usedTurn) {
     drawCard(usedTurn);
     hasCurrentPlayerDrawnCard = false;
   }
-  if (usedTurn === 1) {
+  if (
+    (usedTurn === 1 && turnFlow === "right") ||
+    (usedTurn === 3 && turnFlow === "left")
+  ) {
     togglePlayerOPPlayability();
     toggleColorSelect();
   } else {
