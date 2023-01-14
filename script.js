@@ -194,10 +194,14 @@ function startGame() {
     setTimeout(nextPlay, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
   }
 }
-// make the computer play
+// control all plays
 function nextPlay() {
   if (bottomPlayerElement.classList.contains("clickable")) {
     togglePlayerOPPlayability();
+  }
+  if (deckElement.childNodes.length < 4) {
+    // deck will soon run out of cards, cannot sustain a possible draw four
+    regenerateDeck();
   }
   hasCurrentPlayerDrawnCard = false;
   if (lastSpecialCardPlayed) {
@@ -605,7 +609,8 @@ function setStartingTurn() {
   currentTurn = randomizeStartingTurn();
 }
 function randomizeStartingTurn() {
-  return Math.floor(Math.random() * numberOfPlayers);
+  // return Math.floor(Math.random() * numberOfPlayers);
+  return 0;
 }
 function updateTurnOnHTML(currentTurn) {
   currentTurnElement.innerText = `Current Turn: ${players[currentTurn].player}`;
@@ -715,7 +720,7 @@ function updateCurrentColor(cardId) {
       handleColorChange("yellow-text", "Yellow");
       break;
     case "four-wild" || "black-wild":
-      handleColorChange("", "Wild card!");
+      handleColorChange("", "Wild card");
       break;
   }
 }
@@ -735,15 +740,25 @@ function handleColorChoosing(colorId) {
   }, 250);
   setTimeout(nextPlay, 500);
 }
+// handle almost empty deck
+function regenerateDeck() {
+  discardPileElement.childNodes.forEach((discardedCard, index) => {
+    // get all cards but the last one
+    if (index === discardPileElement.childNodes.length - 1) {
+      return;
+    }
+    discardedCard.classList.toggle("remove");
+    setTimeout(() => {
+      let removedCard = discardPileElement.removeChild(discardedCard);
+      flipCard(removedCard);
+      discardedCard.classList.toggle("remove");
+      addChildElement(deckElement, removedCard);
+    }, 300 * index);
+  });
+}
 // utility functions
 function createElement(elemType) {
   return document.createElement(elemType);
-}
-function addClassToElement(elem, className) {
-  elem.classList.add(className);
-}
-function addIdToElement(elem, id) {
-  elem.id = id;
 }
 function addChildElement(parentElem, childElem) {
   parentElem.appendChild(childElem);
