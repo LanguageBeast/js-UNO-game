@@ -59,7 +59,6 @@ body {
 /* center of the board */
 .board-center {
   width: 300px;
-
   grid-area: center;
   display: flex;
   justify-content: center;
@@ -299,16 +298,28 @@ body {
   background-color: var(--red-color);
   color: var(--red-color);
 }
+.red-text {
+  color: var(--red-color);
+}
 .green {
   background-color: var(--green-color);
+  color: var(--green-color);
+}
+.green-text {
   color: var(--green-color);
 }
 .yellow {
   background-color: var(--yellow-color);
   color: var(--yellow-color);
 }
+.yellow-text {
+  color: var(--yellow-color);
+}
 .blue {
   background-color: var(--blue-color);
+  color: var(--blue-color);
+}
+.blue-text {
   color: var(--blue-color);
 }
 .black-wild,
@@ -368,7 +379,7 @@ body {
 /* pass turn button */
 .pass-turn {
   display: block;
-  margin-inline: auto;
+  margin-inline: calc(var(--board-width) / 12);
   width: 100px;
   height: 40px;
   font-weight: bold;
@@ -379,6 +390,34 @@ body {
   margin-block: 1rem;
 }
 
+/* choose/current color */
+
+.current-color,
+.choose-color {
+  margin: 0;
+  font-size: var(--number-fs-24);
+  position: absolute;
+  opacity: 0.5;
+  font-weight: bold;
+}
+.current-color {
+  margin-inline: calc(var(--board-width) / 2 - 120px);
+  margin-top: calc(var(--board-height) / 5);
+}
+.choose-color {
+  text-align: center;
+  margin-inline: calc(var(--board-width) / 2 - 164px);
+  top: calc(var(--board-height) / 1.1);
+}
+.colors-list {
+  display: flex;
+}
+.colors-list button {
+  width: 50px;
+  margin-inline: 1rem;
+  margin-block: 0;
+}
+
 /* util */
 .in-deck {
   position: absolute;
@@ -386,7 +425,8 @@ body {
 .flip {
   transform: rotateY(180deg) translateX(-3px);
 }
-.invisible {
+.invisible,
+.choose-color-invisible {
   visibility: hidden;
 }
 .remove {
