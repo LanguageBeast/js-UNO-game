@@ -11,6 +11,7 @@ const passTurnButtonElement = document.querySelector(".pass-turn");
 const currentColorSpanElement = document.querySelector(".current-color span");
 const chooseAColorElement = document.querySelector(".choose-color");
 const colorButtonElements = document.querySelectorAll(".choose-color button");
+const UNObuttonElement = document.querySelector(".uno-button");
 let allCardsInDeck;
 let cardsInDeck;
 
@@ -33,6 +34,7 @@ let chosenColor = "";
 
 // objects
 let hasCurrentPlayerDrawnCard;
+let hasCurrentPlayerPlayedCard;
 const cards = [
   { color: "red", type: "number", value: 0 },
   { color: "red", type: "number", value: 1 },
@@ -146,22 +148,27 @@ const cards = [
 
 // players
 let currentTurn;
+let hasOPCalledUNOCorrectly;
 const players = [
   {
     player: "OP",
     currentCards: [],
+    hasSaidUNO: false,
   },
   {
     player: "Candace",
     currentCards: [],
+    hasSaidUNO: false,
   },
   {
     player: "Amanda",
     currentCards: [],
+    hasSaidUNO: false,
   },
   {
     player: "Veronica",
     currentCards: [],
+    hasSaidUNO: false,
   },
 ];
 
@@ -178,6 +185,10 @@ colorButtonElements.forEach((button) => {
     handleColorChoosing(e.target.id);
   });
 });
+// add event listener to UNO button
+UNObuttonElement.addEventListener("click", () => {
+  checkUNOCondition(0);
+});
 
 // ------------------------------
 
@@ -189,7 +200,7 @@ function startGame() {
   toggleVariablesVisibility();
   setStartingTurn();
   updateTurnOnHTML(currentTurn);
-  hasCurrentPlayerDrawnCard = false;
+  hasOPCalledUNOCorrectly = false;
   if (currentTurn !== 0) {
     setTimeout(nextPlay, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
   }
@@ -204,6 +215,7 @@ function nextPlay() {
     regenerateDeck();
   }
   hasCurrentPlayerDrawnCard = false;
+  hasCurrentPlayerPlayedCard = false;
   if (lastSpecialCardPlayed) {
     handleSpecialCard(currentTurn);
   } else {
@@ -213,6 +225,7 @@ function nextPlay() {
       handleNextTurn();
     } else {
       updateTurnOnHTML(currentTurn);
+      togglePlayerOPPassTurnButton();
       if (bottomPlayerElement.classList.contains("unclickable")) {
         togglePlayerOPPlayability();
       }
@@ -236,8 +249,10 @@ function makeBotPlay(usedTurn) {
     chosenColor = "";
     setTimeout(flipCard, 500, chosenRandomCard);
     setTimeout(dispatchCardToDiscardPile, 1000, chosenRandomCard, usedTurn);
+    setTimeout(nextPlay, 1500);
+  } else {
+    setTimeout(nextPlay, 100);
   }
-  setTimeout(nextPlay, 1500);
 }
 function handleNextTurn() {
   if (turnFlow === "right") {
@@ -274,6 +289,8 @@ function getPlayableCardsByBot(usedTurn) {
 function togglePlayerOPPlayability() {
   bottomPlayerElement.classList.toggle("unclickable");
   deckElement.classList.toggle("unclickable");
+}
+function togglePlayerOPPassTurnButton() {
   passTurnButtonElement.classList.toggle("unclickable");
 }
 function generateCard(card) {
@@ -474,11 +491,12 @@ function playCard(card) {
   let chosenCard = getChosenCard(card);
   if (checkIfCardIsPlayable(chosenCard.id)) {
     dispatchCardToDiscardPile(chosenCard);
+    togglePlayerOPPlayability();
     chosenColor = "";
-    setTimeout(() => {
-      handleNextTurn();
-      nextPlay();
-    }, 500);
+    // setTimeout(() => {
+    //   handleNextTurn();
+    //   nextPlay();
+    // }, 500);
   }
 }
 function getChosenCard(card) {
@@ -501,6 +519,7 @@ function dispatchCardToDiscardPile(cardElement, setTurn = undefined) {
     checkIfSpecial(removedCard.id);
     updateCurrentColor(removedCard.id);
     addChildElement(discardPileElement, removedCard);
+    hasCurrentPlayerPlayedCard = true;
     setTimeout(() => {
       removedCard.classList.toggle("remove");
     }, 50);
@@ -600,8 +619,13 @@ function enableButtons() {
   passTurnButtonElement.addEventListener("click", passTurn);
 }
 function passTurn() {
-  handleNextTurn();
-  nextPlay();
+  if (hasCurrentPlayerDrawnCard || hasCurrentPlayerPlayedCard) {
+    handleNextTurn();
+    togglePlayerOPPassTurnButton();
+    nextPlay();
+  } else {
+    return;
+  }
 }
 
 // turns functionality
@@ -633,7 +657,6 @@ function handleSpecialCard(usedTurn) {
       handleReverseCard();
       break;
     case "wild":
-      console.log("wild");
       handleWildCard(usedTurn);
       break;
     case "draw-two":

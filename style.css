@@ -139,7 +139,8 @@ body {
 .player-left,
 .player-right {
   height: 500px;
-  width: 150px;
+  width: 160px;
+  transform: translateX(-0.5rem);
 }
 .player-left,
 .player-right {
@@ -171,6 +172,9 @@ body {
 }
 .player-bottom {
   grid-area: bottom;
+}
+.player-bottom .card-container {
+  cursor: pointer;
 }
 /* player names */
 .player-left-name,
@@ -380,7 +384,8 @@ body {
 /* pass turn button */
 .pass-turn {
   display: block;
-  margin-inline: calc(var(--board-width) / 12);
+  margin-inline: calc(var(--board-width) / 1.75);
+  transform: translateY(-7.5rem);
   width: 100px;
   height: 40px;
   font-weight: bold;
@@ -391,6 +396,65 @@ body {
   margin-block: 1rem;
 }
 
+/* UNO styles */
+.uno-button {
+  display: block;
+  margin-inline: calc(var(--board-width) / 1.75);
+  transform: translateY(-7.5rem);
+  width: 100px;
+  height: 40px;
+  font-weight: bold;
+  letter-spacing: 1.1px;
+  background: var(--bg-color);
+  color: var(--card-bg-color);
+  border-radius: 10px;
+  margin-block: 1rem;
+}
+.uno-text-animation {
+  animation: uno-text 4s infinite ease-in-out;
+}
+.uno-button-animation {
+  animation: uno-button 4s infinite ease-in-out;
+}
+@keyframes uno-text {
+  0% {
+    color: var(--red-color);
+  }
+  25% {
+    color: var(--blue-color);
+  }
+  50% {
+    color: var(--yellow-color);
+  }
+  75% {
+    color: var(--green-color);
+  }
+  100% {
+    color: var(--red-color);
+  }
+}
+@keyframes uno-button {
+  0% {
+    background-color: var(--red-color);
+    border-color: var(--red-color);
+  }
+  25% {
+    background-color: var(--blue-color);
+    border-color: var(--blue-color);
+  }
+  50% {
+    background-color: var(--yellow-color);
+    border-color: var(--yellow-color);
+  }
+  75% {
+    background-color: var(--green-color);
+    border-color: var(--green-color);
+  }
+  100% {
+    background-color: var(--red-color);
+    border-color: var(--red-color);
+  }
+}
 /* choose/current color */
 
 .current-color,
