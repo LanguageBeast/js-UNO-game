@@ -216,13 +216,12 @@ function startGame() {
 // control all plays
 function nextPlay() {
   let previousPlayer = getPreviousTurnPlayer();
+  // pesky little bug, couldn't really find what was causing it, so I had to use some tape.
+  checkCardsIntegrity(previousPlayer);
   // check if previous player won; if true, finish game, else keep going
   if (checkUNOBots(previousPlayer) || checkUNOOP(previousPlayer)) {
     finishGame(previousPlayer);
   } else {
-    if (bottomPlayerElement.classList.contains("clickable")) {
-      togglePlayerOPPlayability();
-    }
     if (deckElement.childNodes.length < 4) {
       // deck will soon run out of cards, cannot sustain a possible draw four
       regenerateDeck();
@@ -233,12 +232,20 @@ function nextPlay() {
       handleSpecialCard(currentTurn);
     } else {
       if (currentTurn < numberOfPlayers && currentTurn > 0) {
+        if (!bottomPlayerElement.classList.contains("unclickable")) {
+          togglePlayerOPPlayability();
+        }
+        if (!passTurnButtonElement.classList.contains("unclickable")) {
+          togglePlayerOPPassTurnButton();
+        }
         updateTurnOnHTML(currentTurn);
         setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
         handleNextTurn();
       } else {
         updateTurnOnHTML(currentTurn);
-        togglePlayerOPPassTurnButton();
+        if (passTurnButtonElement.classList.contains("unclickable")) {
+          togglePlayerOPPassTurnButton();
+        }
         if (bottomPlayerElement.classList.contains("unclickable")) {
           togglePlayerOPPlayability();
         }
@@ -447,6 +454,8 @@ function dealCards() {
     if (dealtCards === cardsPerPlayer * numberOfPlayers) {
       clearInterval(id);
       flipMainPlayerCards();
+      passTurnButtonElement.classList.toggle("unclickable");
+      UNObuttonElement.classList.toggle("unclickable");
     }
   }
 }
@@ -540,7 +549,6 @@ function dispatchCardToDiscardPile(cardElement, setTurn = undefined) {
   }, 300); // 300 is the duration of the animation (0.3s)
 }
 function updateCardList(cardId, setTurn) {
-  console.log("card extracted", setTurn);
   let usedTurn = setTurn === undefined ? currentTurn : setTurn;
   players[usedTurn].currentCards = players[usedTurn].currentCards.filter(
     (item) => item !== cardId
@@ -636,7 +644,6 @@ function enableButtons() {
 function passTurn() {
   if (hasCurrentPlayerDrawnCard || hasCurrentPlayerPlayedCard) {
     handleNextTurn();
-    togglePlayerOPPassTurnButton();
     nextPlay();
   } else {
     return;
@@ -648,8 +655,7 @@ function setStartingTurn() {
   currentTurn = randomizeStartingTurn();
 }
 function randomizeStartingTurn() {
-  // return Math.floor(Math.random() * numberOfPlayers);
-  return 0;
+  return Math.floor(Math.random() * numberOfPlayers);
 }
 function updateTurnOnHTML(currentTurn) {
   currentTurnElement.innerText = `Current Turn: ${players[currentTurn].player}`;
@@ -866,7 +872,6 @@ function checkUNOOP(usedTurn, buttonCalled = false) {
   if (usedTurn !== 0) {
     return false;
   } else {
-    console.log("used turn: ", usedTurn);
     if (buttonCalled === true) {
       return checkUNO(usedTurn); // usedTurn is always 0
     } else if (players[usedTurn].hasSaidUNO === true) {
@@ -912,6 +917,8 @@ function checkUNO(usedTurn) {
     !players[usedTurn].hasSaidUNO
   ) {
     return false;
+  } else {
+    penalizeUNO(usedTurn);
   }
 }
 
@@ -967,6 +974,9 @@ function finishGame(usedTurn) {
   }
   alert(`${name} won the game!`);
   boardElement.classList.toggle("invisible");
+  passTurnButtonElement.classList.toggle("invisible");
+  UNObuttonElement.classList.toggle("invisible");
+  currentTurnElement.classList.toggle("invisible");
 }
 // utility functions
 function createElement(elemType) {
@@ -974,4 +984,17 @@ function createElement(elemType) {
 }
 function addChildElement(parentElem, childElem) {
   parentElem.appendChild(childElem);
+}
+// get bug
+function checkCardsIntegrity(usedTurn) {
+  let playerElement = getPlayer(usedTurn);
+  if (
+    playerElement.childNodes.length !== players[usedTurn].currentCards.length
+  ) {
+    let currentCards = [];
+    playerElement.childNodes.forEach((card) => {
+      currentCards.push(card.id);
+    });
+    players[usedTurn].currentCards = currentCards;
+  }
 }
