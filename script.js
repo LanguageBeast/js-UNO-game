@@ -23,7 +23,7 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 7;
+const cardsPerPlayer = 2;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
@@ -133,7 +133,15 @@ const cards = [
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
   { color: "black-wild", type: "special", value: "wild" },
-  { color: "black-wild", type: "special", value: "wild" }, ///////
+  { color: "black-wild", type: "special", value: "wild" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "red", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "yellow", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "green", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
+  { color: "blue", type: "special", value: "draw-two" },
   { color: "red", type: "special", value: "draw-two" },
   { color: "red", type: "special", value: "draw-two" },
   { color: "yellow", type: "special", value: "draw-two" },
@@ -145,7 +153,7 @@ const cards = [
   { color: "four-wild", type: "special", value: "wild-draw-four" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
   { color: "four-wild", type: "special", value: "wild-draw-four" },
-  { color: "four-wild", type: "special", value: "wild-draw-four" }, ////
+  { color: "four-wild", type: "special", value: "wild-draw-four" },
 ];
 
 // players
@@ -188,7 +196,7 @@ colorButtonElements.forEach((button) => {
 });
 // add event listener to UNO button
 UNObuttonElement.addEventListener("click", () => {
-  checkUNOOP(0);
+  checkUNOOP(0, true);
 });
 
 // ------------------------------
@@ -209,27 +217,31 @@ function startGame() {
 function nextPlay() {
   let previousPlayer = getPreviousTurnPlayer();
   // check if previous player won; if true, finish game, else keep going
-  if (bottomPlayerElement.classList.contains("clickable")) {
-    togglePlayerOPPlayability();
-  }
-  if (deckElement.childNodes.length < 4) {
-    // deck will soon run out of cards, cannot sustain a possible draw four
-    regenerateDeck();
-  }
-  hasCurrentPlayerDrawnCard = false;
-  hasCurrentPlayerPlayedCard = false;
-  if (lastSpecialCardPlayed) {
-    handleSpecialCard(currentTurn);
+  if (checkUNOBots(previousPlayer) || checkUNOOP(previousPlayer)) {
+    finishGame(previousPlayer);
   } else {
-    if (currentTurn < numberOfPlayers && currentTurn > 0) {
-      updateTurnOnHTML(currentTurn);
-      setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
-      handleNextTurn();
+    if (bottomPlayerElement.classList.contains("clickable")) {
+      togglePlayerOPPlayability();
+    }
+    if (deckElement.childNodes.length < 4) {
+      // deck will soon run out of cards, cannot sustain a possible draw four
+      regenerateDeck();
+    }
+    hasCurrentPlayerDrawnCard = false;
+    hasCurrentPlayerPlayedCard = false;
+    if (lastSpecialCardPlayed) {
+      handleSpecialCard(currentTurn);
     } else {
-      updateTurnOnHTML(currentTurn);
-      togglePlayerOPPassTurnButton();
-      if (bottomPlayerElement.classList.contains("unclickable")) {
-        togglePlayerOPPlayability();
+      if (currentTurn < numberOfPlayers && currentTurn > 0) {
+        updateTurnOnHTML(currentTurn);
+        setTimeout(makeBotPlay, 1000 * currentTurn, currentTurn);
+        handleNextTurn();
+      } else {
+        updateTurnOnHTML(currentTurn);
+        togglePlayerOPPassTurnButton();
+        if (bottomPlayerElement.classList.contains("unclickable")) {
+          togglePlayerOPPlayability();
+        }
       }
     }
   }
@@ -528,6 +540,7 @@ function dispatchCardToDiscardPile(cardElement, setTurn = undefined) {
   }, 300); // 300 is the duration of the animation (0.3s)
 }
 function updateCardList(cardId, setTurn) {
+  console.log("card extracted", setTurn);
   let usedTurn = setTurn === undefined ? currentTurn : setTurn;
   players[usedTurn].currentCards = players[usedTurn].currentCards.filter(
     (item) => item !== cardId
@@ -654,6 +667,8 @@ function handleSpecialCard(usedTurn) {
   switch (lastSpecialCardPlayed) {
     case "skip":
       handleSkipCard();
+      checkUNOBots(usedTurn);
+      checkUNOOP(usedTurn);
       break;
     case "reverse":
       handleReverseCard();
@@ -663,9 +678,13 @@ function handleSpecialCard(usedTurn) {
       break;
     case "draw-two":
       handleDrawTwoCard(usedTurn);
+      checkUNOBots(usedTurn);
+      checkUNOOP(usedTurn);
       break;
     case "wild-draw-four":
       handleWildDrawFourCard(usedTurn);
+      checkUNOBots(usedTurn);
+      checkUNOOP(usedTurn);
       break;
   }
 }
@@ -806,27 +825,83 @@ function getPreviousTurnPlayer() {
       previousPlayer -= 4;
     }
   }
-  console.log(
-    "previous player: ",
-    previousPlayer,
-    "current player: ",
-    currentTurn
-  );
   return previousPlayer;
 }
 function checkUNOBots(usedTurn) {
+  if (usedTurn === 0) {
+    return false;
+  } else {
+    if (
+      players[usedTurn].currentCards.length === 0 &&
+      players[usedTurn].hasSaidUNO
+    ) {
+      return true;
+    } else if (
+      players[usedTurn].currentCards.length === 1 &&
+      !players[usedTurn].hasSaidUNO
+    ) {
+      players[usedTurn].hasSaidUNO = true;
+      toggleUNOColors(usedTurn);
+      return false;
+    } else if (
+      players[usedTurn].currentCards.length > 1 &&
+      players[usedTurn].hasSaidUNO
+    ) {
+      players[usedTurn].hasSaidUNO = false;
+      toggleUNOColors(usedTurn);
+    } else if (
+      players[usedTurn].currentCards.length === 1 &&
+      players[usedTurn].hasSaidUNO
+    ) {
+      return false;
+    } else if (
+      players[usedTurn].currentCards.length > 2 &&
+      !players[usedTurn].hasSaidUNO
+    ) {
+      return false;
+    }
+  }
+}
+function checkUNOOP(usedTurn, buttonCalled = false) {
+  if (usedTurn !== 0) {
+    return false;
+  } else {
+    console.log("used turn: ", usedTurn);
+    if (buttonCalled === true) {
+      return checkUNO(usedTurn); // usedTurn is always 0
+    } else if (players[usedTurn].hasSaidUNO === true) {
+      return checkUNO(usedTurn);
+    }
+  }
+}
+function checkUNO(usedTurn) {
   if (
     players[usedTurn].currentCards.length === 0 &&
     players[usedTurn].hasSaidUNO
   ) {
     return true;
   } else if (
-    (players[usedTurn].currentCards.length === 1 &&
-      !players[usedTurn].hasSaidUNO) ||
-    (players[usedTurn].currentCards.length > 2 && players[usedTurn].hasSaidUNO)
+    players[usedTurn].currentCards.length === 1 &&
+    !players[usedTurn].hasSaidUNO &&
+    !hasCurrentPlayerPlayedCard
   ) {
+    penalizeUNO(usedTurn);
+  } else if (
+    players[usedTurn].currentCards.length === 1 &&
+    !players[usedTurn].hasSaidUNO &&
+    hasCurrentPlayerPlayedCard
+  ) {
+    players[usedTurn].hasSaidUNO = true;
     toggleUNOColors(usedTurn);
+    toggleUNObutton();
     return false;
+  } else if (
+    players[usedTurn].currentCards.length > 1 &&
+    players[usedTurn].hasSaidUNO
+  ) {
+    players[usedTurn].hasSaidUNO = false;
+    toggleUNOColors(usedTurn);
+    toggleUNObutton();
   } else if (
     players[usedTurn].currentCards.length === 1 &&
     players[usedTurn].hasSaidUNO
@@ -839,90 +914,7 @@ function checkUNOBots(usedTurn) {
     return false;
   }
 }
-function checkUNOOP(usedTurn) {
-  // first check main player
-  if (
-    usedTurn === 0 &&
-    players[usedTurn].currentCards.length === 0 &&
-    players[usedTurn].hasSaidUNO === true
-  ) {
-    console.log("1");
-    return true;
-  } else if (
-    players[usedTurn].currentCards.length === 0 &&
-    players[usedTurn].hasSaidUNO === true &&
-    usedTurn !== 0
-  ) {
-    console.log("2");
-    return true;
-  } else if (
-    players[usedTurn].currentCards.length === 0 &&
-    players[usedTurn].hasSaidUNO === false
-  ) {
-    // penalize player for not calling UNO
-    console.log("3");
-    penalizeUNO(usedTurn);
-    return false;
-  } else if (
-    players[usedTurn].currentCards.length === 1 &&
-    players[usedTurn].hasSaidUNO === false
-  ) {
-    // player has reached 1 card.
-    // bots will automatically call UNO with line below. It works with OP if button called correctly!
-    console.log("4");
-    players[usedTurn].hasSaidUNO === true;
-    toggleUNOColors(usedTurn);
-    if (usedTurn === 0) {
-      toggleUNObutton();
-    }
-    return false;
-  } else if (
-    players[usedTurn].currentCards.length === 1 &&
-    players[usedTurn].hasSaidUNO === true
-  ) {
-    // nothing changes
-    return false;
-  } else if (
-    players[usedTurn].currentCards.length > 1 &&
-    players[usedTurn].hasSaidUNO === true
-  ) {
-    // player had 1 card but drew one, and had called UNO
-    console.log("5");
-    players[usedTurn].hasSaidUNO === false;
-    toggleUNOColors(usedTurn);
-    if (usedTurn === 0) {
-      toggleUNObutton();
-    }
-    return false;
-  } else if (
-    players[usedTurn].currentCards.length > 1 &&
-    players[usedTurn].hasSaidUNO === false
-  ) {
-    // player has 2 or more cards and never called uno; the case of almost all turns
-    console.log("6");
-    if (usedTurn === 0) {
-      // player wrongly called UNO
-      penalizeUNO(usedTurn);
-    }
-    return false;
-  } else if (
-    usedTurn === 0 &&
-    usedTurn !== currentTurn &&
-    players[usedTurn].currentCards.length === 1
-  ) {
-    // OP forgot to call UNO during their turn
-    console.log("7");
-    console.log("Player forgot to call UNO!");
-    penalizeUNO(usedTurn);
-    return false;
-  } else {
-    // mistakenly calling UNO is penalized.
-    console.log("8");
-    console.log("Player has 2 or more cards!");
-    penalizeUNO(usedTurn);
-    return false;
-  }
-}
+
 function toggleUNOColors(usedTurn) {
   switch (usedTurn) {
     case 0:
@@ -956,6 +948,25 @@ function penalizeUNO(usedTurn) {
       hasCurrentPlayerDrawnCard = false;
     }
   }
+}
+function finishGame(usedTurn) {
+  let name;
+  switch (usedTurn) {
+    case 0:
+      name = "You have";
+      break;
+    case 1:
+      name = "Candace has";
+      break;
+    case 2:
+      name = "Amanda has";
+      break;
+    case 3:
+      name = "Veronica has";
+      break;
+  }
+  alert(`${name} won the game!`);
+  boardElement.classList.toggle("invisible");
 }
 // utility functions
 function createElement(elemType) {
