@@ -28,6 +28,8 @@ const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
 let lastSpecialCardPlayed = "";
+let hasPlayerBeenSkipped = false;
+let hasOPCalledUno = false;
 
 const colors = ["green", "blue", "red", "yellow"];
 let chosenColor = "";
@@ -148,7 +150,6 @@ const cards = [
 
 // players
 let currentTurn;
-let hasOPCalledUNOCorrectly;
 const players = [
   {
     player: "OP",
@@ -187,7 +188,7 @@ colorButtonElements.forEach((button) => {
 });
 // add event listener to UNO button
 UNObuttonElement.addEventListener("click", () => {
-  checkUNOCondition(0);
+  checkUNOOP(0);
 });
 
 // ------------------------------
@@ -200,13 +201,14 @@ function startGame() {
   toggleVariablesVisibility();
   setStartingTurn();
   updateTurnOnHTML(currentTurn);
-  hasOPCalledUNOCorrectly = false;
   if (currentTurn !== 0) {
     setTimeout(nextPlay, cardsPerPlayer * numberOfPlayers * dealDelay * 2);
   }
 }
 // control all plays
 function nextPlay() {
+  let previousPlayer = getPreviousTurnPlayer();
+  // check if previous player won; if true, finish game, else keep going
   if (bottomPlayerElement.classList.contains("clickable")) {
     togglePlayerOPPlayability();
   }
@@ -670,6 +672,7 @@ function handleSpecialCard(usedTurn) {
 function handleSkipCard() {
   handleNextTurn();
   lastSpecialCardPlayed = "";
+  hasPlayerBeenSkipped = true;
   setTimeout(nextPlay, 500);
 }
 function handleReverseCard() {
@@ -686,6 +689,7 @@ function handleDrawTwoCard(usedTurn) {
   }
   handleNextTurn();
   lastSpecialCardPlayed = "";
+  hasPlayerBeenSkipped = true;
   setTimeout(nextPlay, 500);
 }
 function handleWildCard(usedTurn) {
@@ -718,6 +722,7 @@ function handleWildDrawFourCard(usedTurn) {
   }
   handleNextTurn();
   lastSpecialCardPlayed = "";
+  hasPlayerBeenSkipped === true;
 }
 // handle current color and color choosing
 function handleColorByBot() {
@@ -778,6 +783,179 @@ function regenerateDeck() {
       addChildElement(deckElement, removedCard);
     }, 300 * index);
   });
+}
+// check for winning conditions; usedTurn comes in - 1!
+function getPreviousTurnPlayer() {
+  let previousPlayer;
+  if (turnFlow === "right") {
+    previousPlayer = currentTurn - 1;
+    if (hasPlayerBeenSkipped === true) {
+      previousPlayer--;
+      hasPlayerBeenSkipped = false;
+    }
+    if (previousPlayer < 0) {
+      previousPlayer += 4;
+    }
+  } else {
+    previousPlayer = currentTurn + 1;
+    if (hasPlayerBeenSkipped === true) {
+      previousPlayer++;
+      hasPlayerBeenSkipped = false;
+    }
+    if (previousPlayer > 3) {
+      previousPlayer -= 4;
+    }
+  }
+  console.log(
+    "previous player: ",
+    previousPlayer,
+    "current player: ",
+    currentTurn
+  );
+  return previousPlayer;
+}
+function checkUNOBots(usedTurn) {
+  if (
+    players[usedTurn].currentCards.length === 0 &&
+    players[usedTurn].hasSaidUNO
+  ) {
+    return true;
+  } else if (
+    (players[usedTurn].currentCards.length === 1 &&
+      !players[usedTurn].hasSaidUNO) ||
+    (players[usedTurn].currentCards.length > 2 && players[usedTurn].hasSaidUNO)
+  ) {
+    toggleUNOColors(usedTurn);
+    return false;
+  } else if (
+    players[usedTurn].currentCards.length === 1 &&
+    players[usedTurn].hasSaidUNO
+  ) {
+    return false;
+  } else if (
+    players[usedTurn].currentCards.length > 2 &&
+    !players[usedTurn].hasSaidUNO
+  ) {
+    return false;
+  }
+}
+function checkUNOOP(usedTurn) {
+  // first check main player
+  if (
+    usedTurn === 0 &&
+    players[usedTurn].currentCards.length === 0 &&
+    players[usedTurn].hasSaidUNO === true
+  ) {
+    console.log("1");
+    return true;
+  } else if (
+    players[usedTurn].currentCards.length === 0 &&
+    players[usedTurn].hasSaidUNO === true &&
+    usedTurn !== 0
+  ) {
+    console.log("2");
+    return true;
+  } else if (
+    players[usedTurn].currentCards.length === 0 &&
+    players[usedTurn].hasSaidUNO === false
+  ) {
+    // penalize player for not calling UNO
+    console.log("3");
+    penalizeUNO(usedTurn);
+    return false;
+  } else if (
+    players[usedTurn].currentCards.length === 1 &&
+    players[usedTurn].hasSaidUNO === false
+  ) {
+    // player has reached 1 card.
+    // bots will automatically call UNO with line below. It works with OP if button called correctly!
+    console.log("4");
+    players[usedTurn].hasSaidUNO === true;
+    toggleUNOColors(usedTurn);
+    if (usedTurn === 0) {
+      toggleUNObutton();
+    }
+    return false;
+  } else if (
+    players[usedTurn].currentCards.length === 1 &&
+    players[usedTurn].hasSaidUNO === true
+  ) {
+    // nothing changes
+    return false;
+  } else if (
+    players[usedTurn].currentCards.length > 1 &&
+    players[usedTurn].hasSaidUNO === true
+  ) {
+    // player had 1 card but drew one, and had called UNO
+    console.log("5");
+    players[usedTurn].hasSaidUNO === false;
+    toggleUNOColors(usedTurn);
+    if (usedTurn === 0) {
+      toggleUNObutton();
+    }
+    return false;
+  } else if (
+    players[usedTurn].currentCards.length > 1 &&
+    players[usedTurn].hasSaidUNO === false
+  ) {
+    // player has 2 or more cards and never called uno; the case of almost all turns
+    console.log("6");
+    if (usedTurn === 0) {
+      // player wrongly called UNO
+      penalizeUNO(usedTurn);
+    }
+    return false;
+  } else if (
+    usedTurn === 0 &&
+    usedTurn !== currentTurn &&
+    players[usedTurn].currentCards.length === 1
+  ) {
+    // OP forgot to call UNO during their turn
+    console.log("7");
+    console.log("Player forgot to call UNO!");
+    penalizeUNO(usedTurn);
+    return false;
+  } else {
+    // mistakenly calling UNO is penalized.
+    console.log("8");
+    console.log("Player has 2 or more cards!");
+    penalizeUNO(usedTurn);
+    return false;
+  }
+}
+function toggleUNOColors(usedTurn) {
+  switch (usedTurn) {
+    case 0:
+      playerBottomName.classList.toggle("uno-text-animation");
+      break;
+    case 1:
+      playerRightName.classList.toggle("uno-text-animation");
+      break;
+    case 2:
+      playerTopName.classList.toggle("uno-text-animation");
+      break;
+    case 3:
+      playerLeftName.classList.toggle("uno-text-animation");
+      break;
+  }
+}
+function toggleUNObutton() {
+  UNObuttonElement.classList.toggle("uno-button-animation");
+}
+function penalizeUNO(usedTurn) {
+  if (hasCurrentPlayerDrawnCard === true) {
+    hasCurrentPlayerDrawnCard = false;
+    for (let i = 0; i < 2; i++) {
+      drawCard(usedTurn);
+      hasCurrentPlayerDrawnCard = false;
+    }
+    hasCurrentPlayerDrawnCard = true;
+  } else {
+    for (let i = 0; i < 2; i++) {
+      drawCard(usedTurn);
+      hasCurrentPlayerDrawnCard = false;
+    }
+  }
 }
 // utility functions
 function createElement(elemType) {
