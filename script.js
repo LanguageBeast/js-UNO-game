@@ -23,7 +23,7 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 2;
+const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
