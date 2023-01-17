@@ -12,6 +12,8 @@ const currentColorSpanElement = document.querySelector(".current-color span");
 const chooseAColorElement = document.querySelector(".choose-color");
 const colorButtonElements = document.querySelectorAll(".choose-color button");
 const UNObuttonElement = document.querySelector(".uno-button");
+const modalWindowElement = document.getElementById("modal-window");
+const modalContentElement = document.getElementById("modal-content");
 let allCardsInDeck;
 let cardsInDeck;
 
@@ -23,7 +25,7 @@ const playerBottomName = document.querySelector(".player-bottom-name");
 const currentTurnElement = document.querySelector(".header-current-turn");
 
 const numberOfPlayers = 4;
-const cardsPerPlayer = 2;
+const cardsPerPlayer = 7;
 const dealDelay = 50;
 const finishedDealing = false;
 let turnFlow = "right";
@@ -182,6 +184,8 @@ const players = [
 ];
 
 //main code
+// force landscape orietation
+
 generateCards();
 
 // add event listener to play button
@@ -216,8 +220,6 @@ function startGame() {
 // control all plays
 function nextPlay() {
   let previousPlayer = getPreviousTurnPlayer();
-  // pesky little bug, couldn't really find what was causing it, so I had to use some tape.
-  checkCardsIntegrity(previousPlayer);
   // check if previous player won; if true, finish game, else keep going
   if (checkUNOBots(previousPlayer) || checkUNOOP(previousPlayer)) {
     finishGame(previousPlayer);
@@ -655,7 +657,8 @@ function setStartingTurn() {
   currentTurn = randomizeStartingTurn();
 }
 function randomizeStartingTurn() {
-  return Math.floor(Math.random() * numberOfPlayers);
+  // return Math.floor(Math.random() * numberOfPlayers);
+  return 0;
 }
 function updateTurnOnHTML(currentTurn) {
   currentTurnElement.innerText = `Current Turn: ${players[currentTurn].player}`;
@@ -913,12 +916,12 @@ function checkUNO(usedTurn) {
   ) {
     return false;
   } else if (
-    players[usedTurn].currentCards.length > 2 &&
+    players[usedTurn].currentCards.length > 1 &&
     !players[usedTurn].hasSaidUNO
   ) {
+    penalizeUNO(usedTurn);
     return false;
   } else {
-    penalizeUNO(usedTurn);
   }
 }
 

@@ -26,6 +26,7 @@ body {
   overflow-x: hidden;
   font-family: "Poppins", sans-serif;
   background-color: var(--bg-color);
+  user-select: none;
 }
 
 /* header styles */
@@ -55,6 +56,10 @@ body {
   color: var(--card-bg-color);
   font-weight: bold;
   border: 2px solid var(--card-bg-color);
+}
+/* board container */
+.board-container {
+  display: flex;
 }
 /* center of the board */
 .board-center {
@@ -99,7 +104,6 @@ body {
   height: var(--board-height);
   border-radius: 50px;
   background-color: var(--board-color);
-  margin-block: 5rem 2.5rem;
 }
 .board::before {
   content: "";
@@ -169,6 +173,7 @@ body {
 }
 .player-top {
   grid-area: top;
+  flex-wrap: wrap-reverse;
 }
 .player-bottom {
   grid-area: bottom;
@@ -198,7 +203,7 @@ body {
   margin-inline: calc(var(--board-width) * 0.65 - 18px);
 }
 .player-top-name {
-  top: calc(var(--board-height) * 0.65 - 36px);
+  margin-block: calc(var(--board-height) * 0.34);
   margin-inline: calc(var(--board-width) / 2 - 55px);
 }
 .player-bottom-name {
@@ -384,8 +389,9 @@ body {
 /* pass turn button */
 .pass-turn {
   display: block;
-  margin-inline: calc(var(--board-width) / 1.75);
-  transform: translateY(-7.5rem);
+  margin-inline: auto;
+  transform: translateY(1.5rem);
+  cursor: pointer;
   width: 100px;
   height: 40px;
   font-weight: bold;
@@ -394,13 +400,16 @@ body {
   color: var(--card-bg-color);
   border-radius: 10px;
   margin-block: 1rem;
+  grid-area: bottomBtn;
+  position: relative;
 }
 
 /* UNO styles */
 .uno-button {
   display: block;
-  margin-inline: calc(var(--board-width) / 1.75);
-  transform: translateY(-7.5rem);
+  margin-inline: auto;
+  transform: translateY(-2rem);
+  cursor: pointer;
   width: 100px;
   height: 40px;
   font-weight: bold;
@@ -409,6 +418,8 @@ body {
   color: var(--card-bg-color);
   border-radius: 10px;
   margin-block: 1rem;
+  grid-area: bottomBtn;
+  position: relative;
 }
 .uno-text-animation {
   animation: uno-text 4s infinite ease-in-out;
@@ -466,8 +477,15 @@ body {
   font-weight: bold;
 }
 .current-color {
-  margin-inline: calc(var(--board-width) / 2 - 120px);
-  margin-top: calc(var(--board-height) / 3.5);
+  margin-inline: auto;
+  margin-top: calc(var(--board-height) / 4.5);
+  display: block;
+  width: var(--board-width);
+  text-align: center;
+}
+.current-color span {
+  display: block;
+  text-align: center;
 }
 .choose-color {
   text-align: center;
@@ -513,4 +531,55 @@ body {
 }
 .unclickable {
   pointer-events: none;
+}
+@media (max-width: 40rem) {
+  .board {
+    scale: 0.9;
+  }
+  .board::before {
+    content: none;
+  }
+  .player-right-name {
+    margin: 0;
+    transform: translateX(345px) translateY(-380px);
+  }
+  .player-bottom-name {
+    margin: 0;
+    transform: translateX(307px) translateY(400px);
+  }
+  .player-top-name {
+    margin: 0;
+    transform: translateX(268px) translateY(261px);
+  }
+  .current-color {
+    width: calc(var(--board-width) * 0.9);
+  }
+  .normal-font-main {
+    font-size: var(--number-fs-24);
+  }
+}
+/* modal window */
+.do-not-display {
+  display: none;
+}
+.modal-window {
+  background-color: #000;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 100;
+}
+.modal-content {
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  position: absolute;
+}
+.uno-modal {
+  text-align: center;
+  animation: uno-text 4s infinite ease-in-out;
 }
