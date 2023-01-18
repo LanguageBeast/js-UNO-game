@@ -220,6 +220,7 @@ function startGame() {
 // control all plays
 function nextPlay() {
   let previousPlayer = getPreviousTurnPlayer();
+  checkCardsIntegrity(previousPlayer);
   // check if previous player won; if true, finish game, else keep going
   if (checkUNOBots(previousPlayer) || checkUNOOP(previousPlayer)) {
     finishGame(previousPlayer);

@@ -31,9 +31,9 @@ body {
 
 /* header styles */
 .header-content {
-  display: flex;
-  flex-direction: column;
   margin-block: 1rem 4rem;
+  width: var(--board-width);
+  margin-inline: auto;
 }
 .title {
   text-align: center;
@@ -532,7 +532,10 @@ body {
 .unclickable {
   pointer-events: none;
 }
-@media (max-width: 40rem) {
+@media (max-width: 44rem) {
+  .header-content {
+    width: calc(var(--board-width) * 0.9);
+  }
   .board {
     scale: 0.9;
   }
@@ -556,6 +559,15 @@ body {
   }
   .normal-font-main {
     font-size: var(--number-fs-24);
+  }
+  .choose-color {
+    grid-area: x;
+    top: 20%;
+    margin: 0;
+  }
+  .player-right,
+  .player-left {
+    width: 180px;
   }
 }
 /* modal window */
